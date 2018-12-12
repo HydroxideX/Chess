@@ -264,10 +264,10 @@ void player2Move()
 
 // Checking If It Is Pawn And If True It Must Be At Row 7 That Means x1=6 Else Give Error
 
-    pawnP1(y1,y2,x1,x2,0);                   //#3rft el deadindex ka static 3shan keda sheloh
-    rook1(y1,y2,x1,x2);
-    bishop1(y1,y2,x1,x2);
-    horse1(y1,y2,x1,x2);
+    pawnP2(y1,y2,x1,x2,0);                   //#3rft el deadindex ka static 3shan keda sheloh
+    rook2(y1,y2,x1,x2);
+    bishop2(y1,y2,x1,x2);
+    horse2(y1,y2,x1,x2);
     system("cls");
 
 
@@ -417,7 +417,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
                         return ;
                     }
                     i++;
@@ -425,7 +425,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                 }
                 if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
                 {
-                    player1Move();
+                    player2Move();
                     return ;
                 }
             }
@@ -464,7 +464,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
                         return ;
                     }
                     i++;
@@ -472,7 +472,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                 }
                 if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
                 {
-                    player1Move();
+                    player2Move();
                     return ;            //checks if piece of the same color is on destination
                 }
             }
@@ -561,7 +561,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
                         return ;
                     }
                     i--;
@@ -569,7 +569,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                 }
                 if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='P'||board[x1][y1]=='B'||board[x1][y1]=='R')
                 {
-                    player1Move();
+                    player2Move();
                     return ;              //checks if piece of the same color is on destination
                 }
             }
