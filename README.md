@@ -135,23 +135,24 @@ void CheckDead(int y1,int y2,int x1,int x2)
 }
 void player1Move()
 {
+    printboard();
     int n1,n2;
     char c1,c2,c3;
-    printf("\n");
 // Positions
-   /* printf("PLAYER 1");
-    printf("\n");
-    printf("Enter x1 (Current Piece Row) : ");
-    scanf("%d",&n1);
-    printf("Enter y1 (Current Piece Column) : ");
-    scanf(" %c",&c1);
+    printf("\n\n");
+     printf("PLAYER 1");
+     printf("\n");
+     printf("Enter x1 (Current Piece Row) : ");
+     scanf("%d",&n1);
+     printf("Enter y1 (Current Piece Column) : ");
+     scanf(" %c",&c1);
 
-    printf("Enter x2 ( Row To Move ) : ");
-    scanf("%d",&n2);
-    printf("Enter y2 ( Column To Move ) : ");
-    scanf(" %c",&c2);*/
-    printf("Player 1:");
-    scanf("%c%d%c%d",&c1,&n1,&c2,&n2);
+     printf("Enter x2 ( Row To Move ) : ");
+     scanf("%d",&n2);
+     printf("Enter y2 ( Column To Move ) : ");
+     scanf(" %c",&c2);
+    /*printf("Player 1:");
+    scanf("%c%d%c%d",&c1,&n1,&c2,&n2);*/
 //  Important To Solve Index Problem
     n1--;
     n2--;
@@ -162,7 +163,6 @@ void player1Move()
 // To Solve Conflict Between Character And Integer
     int y1 = c1;
     int y2= c2;
-    printf("\n");
 
     /*        PAWN PAWN PAWN PAWN        */
 
@@ -172,7 +172,7 @@ void player1Move()
     rook1(y1,y2,x1,x2);
     bishop1(y1,y2,x1,x2);
     horse1(y1,y2,x1,x2);
-
+    system("cls");
 
 
 
@@ -233,47 +233,57 @@ void pawnP2(int y1,int y2,int x1,int x2,int deadindex)
 }
 void player2Move()
 {
-// Example Variables : y1 ( pawn ) x1 (pawn  raw )  x2 ( where to move)  y2 ( where to move )
+    printboard();
     int n1,n2;
-    char c1,c2,c3;
-    printf("\n");
+    char c1,c2;
 // Positions
-    /*printf("PLAYER 2");
-    printf("\n");
-    printf("Enter Current Piece Row: ");
-    scanf("%d",&n1);
-    printf("\n");
-    printf("Enter Current Piece Column: ");
-    scanf(" %c",&c1);
-    printf("\n");
+     printf("PLAYER 2:");
+     printf("\n");
+     printf("Enter x1 (Current Piece Row) : ");
+     scanf("%d",&n1);
+     printf("Enter y1 (Current Piece Column) : ");
+     scanf(" %c",&c1);
 
-    printf("Enter Row To Move : ");
-    scanf("%d",&n2);
-    printf("\n");
-    printf("Enter Column To Move  : ");
-    scanf(" %c",&c2);
-    printf("\n");*/
-     printf("Player 2:");
-    scanf("%c%d%c%d",&c1,&n1,&c2,&n2);
+     printf("Enter x2 ( Row To Move ) : ");
+     scanf("%d",&n2);
+     printf("Enter y2 ( Column To Move ) : ");
+     scanf(" %c",&c2);
+
 //  Important To Solve Index Problem
     n1--;
     n2--;
+    int x1=n1;
+    int x2=n2;
     c1=c1-'A';
     c2=c2-'A';
-    int x1=n1,x2=n2;
 // To Solve Conflict Between Character And Integer
     int y1 = c1;
     int y2= c2;
-    printf("\n");
 
     /*        PAWN PAWN PAWN PAWN        */
 
 // Checking If It Is Pawn And If True It Must Be At Row 7 That Means x1=6 Else Give Error
 
-    pawnP2(y1,y2,x1,x2,0);      //sheel el dead index
+    pawnP2(y1,y2,x1,x2,0);                   //#3rft el deadindex ka static 3shan keda sheloh
     rook2(y1,y2,x1,x2);
     bishop2(y1,y2,x1,x2);
     horse2(y1,y2,x1,x2);
+    system("cls");
+
+
+
+    /*
+    while(y1>7||y1<0||y2>7||y2<0||x1>7||x1<0||x2>7||x2<0)
+    {
+        printf("Player 1 :");
+        scanf("%c%d%c%d",&y1,&x1,&y2,&x2);
+        x1--;
+        x2--;
+        y1=y1-'A';
+        y2=y2-'A';
+    }
+    */
+
 
 }
 /**********************************************************************************
@@ -289,13 +299,18 @@ void horse1(int y1,int y2,int x1,int x2)
             if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='b'||board[x2][y2]=='h'||board[x2][y2]=='p'||board[x2][y2]=='r')
             {
                 player1Move();
+                return ;
             }
             if(board[x2][y2]!='-'&&board[x2][y2]!='.')
-            deadPieces[deadindex++]=board[x2][y2];
+                deadPieces[deadindex++]=board[x2][y2];
             board[x2][y2]=board[x1][y1];
             board[x1][y1]=boardlayout[x1][y1];
         }
-        else{player1Move();}
+        else
+        {
+            player1Move();
+            return ;
+        }
     }
 
 
@@ -309,14 +324,19 @@ void horse2(int y1,int y2,int x1,int x2)
             if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='B'||board[x2][y2]=='H'||board[x2][y2]=='P'||board[x2][y2]=='R')
             {
                 player2Move();
+                return ;
             }
             if(board[x2][y2]!='-'&&board[x2][y2]!='.')
-            deadPieces[deadindex++]=board[x2][y2];
+                deadPieces[deadindex++]=board[x2][y2];
             board[x2][y2]=board[x1][y1];
             board[x1][y1]=boardlayout[x1][y1];
         }
-        else{player2Move();}
+        else
+        {
+            player2Move();
+            return ;
         }
+    }
 
 
 }
@@ -331,10 +351,11 @@ void bishop1(int y1,int y2,int x1,int x2)
         else
         {
             player1Move();
+            return ;
         }
     }
 
-    }
+}
 void bishop2(int y1,int y2,int x1,int x2)
 {
     if(board[x1][y1]=='B'||board[x1][y1]=='Q')   //if diff between rows=diff between columns then it is correct move else it restarts
@@ -346,9 +367,10 @@ void bishop2(int y1,int y2,int x1,int x2)
         else
         {
             player2Move();
+            return ;
         }
     }
-    }
+}
 /**********************************************************************************
 *This Function Moves Both The bishop or The Queen Diagonally for                  *
 *both Players if its an empty space it takes it if it is enemy piece it captures  *
@@ -375,13 +397,15 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
                         player1Move();
+                        return ;
                     }
                     i++;
                     j++;
                 }
                 if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
                 {
-                    player1Move();  //checks if piece of the same color is on destination
+                    player1Move();
+                    return ;          //checks if piece of the same color is on destination
                 }
             }
             else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
@@ -393,14 +417,16 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
+                        return ;
                     }
                     i++;
                     j++;
                 }
                 if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
                 {
-                    player1Move();
+                    player2Move();
+                    return ;
                 }
             }
         }
@@ -418,13 +444,15 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
                         player1Move();
+                        return ;
                     }
                     i++;
                     j--;
                 }
                 if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
                 {
-                    player1Move();  //checks if piece of the same color is on destination
+                    player1Move();
+                    return ;              //checks if piece of the same color is on destination
                 }
             }
             else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
@@ -436,14 +464,16 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
+                        return ;
                     }
                     i++;
                     j--;
                 }
                 if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
                 {
-                    player1Move();//checks if piece of the same color is on destination
+                    player2Move();
+                    return ;            //checks if piece of the same color is on destination
                 }
             }
         }
@@ -464,13 +494,15 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
                         player1Move();
+                        return ;
                     }
                     i--;
                     j++;
                 }
                 if(board[x1][y1]=='k'||board[x1][y1]=='q'||board[x1][y1]=='p'||board[x1][y1]=='b'||board[x1][y1]=='r')
                 {
-                    player1Move(); //checks if piece of the same color is on destination
+                    player1Move();
+                    return ;             //checks if piece of the same color is on destination
                 }
             }
             else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
@@ -483,13 +515,15 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
                         player1Move();
+                        return ;
                     }
                     i--;
                     j++;
                 }
                 if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='P'||board[x1][y1]=='B'||board[x1][y1]=='R')
                 {
-                    player1Move();  //checks if piece of the same color is on destination
+                    player1Move();
+                    return ;             //checks if piece of the same color is on destination
                 }
             }
         }
@@ -507,13 +541,15 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
                         player1Move();
+                        return ;
                     }
                     i--;
                     j--;
                 }
                 if(board[x1][y1]=='k'||board[x1][y1]=='q'||board[x1][y1]=='p'||board[x1][y1]=='b'||board[x1][y1]=='r')
                 {
-                    player1Move();   //checks if piece of the same color is on destination
+                    player1Move();
+                    return ;          //checks if piece of the same color is on destination
                 }
             }
             else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
@@ -525,14 +561,16 @@ void diagonal(int y1,int y2,int x1,int x2)
                             ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
                             ||board[i][j]=='h'||board[i][j]=='H')
                     {
-                        player1Move();
+                        player2Move();
+                        return ;
                     }
                     i--;
                     j--;
                 }
                 if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='P'||board[x1][y1]=='B'||board[x1][y1]=='R')
                 {
-                    player1Move();   //checks if piece of the same color is on destination
+                    player2Move();
+                    return ;              //checks if piece of the same color is on destination
                 }
             }
         }
@@ -578,10 +616,11 @@ void rook2(int y1,int y2,int x1,int x2)
         else                    //if wrong input restarts player 1
         {
             player2Move();
+            return ;
         }
     }
 
-    }
+}
 void rook1(int y1,int y2,int x1,int x2)
 {
     if(board[x1][y1]=='r'||board[x1][y1]=='q')             //if white rook
@@ -593,6 +632,7 @@ void rook1(int y1,int y2,int x1,int x2)
         else                    //if wrong input restarts player 1
         {
             player1Move();
+            return ;
         }
     }
 
@@ -623,6 +663,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[x2][i]=='b'||board[x2][i]=='K')
                         {
                             player2Move();
+                            return ;
                         }
                     }
 
@@ -641,6 +682,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[x2][i]=='b'||board[x2][i]=='K')
                         {
                             player2Move();
+                            return ;
                         }
                     }
 
@@ -662,6 +704,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[i][y2]=='b'||board[i][y2]=='K')
                         {
                             player2Move();
+                            return ;
                         }
                     }
                 }
@@ -679,13 +722,15 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[i][y2]=='b'||board[i][y2]=='K')
                         {
                             player2Move();
+                            return ;
                         }
                     }
                 }
             }
             if(board[x2][y2]=='R'||board[x2][y2]=='B'||board[x2][y2]=='P'||board[x2][y2]=='K'||board[x2][y2]=='H'||board[x2][y2]=='Q')
             {
-                player2Move();           //checks if destination has same color of the piece if so it restarts as cannot capture
+                player2Move();
+                return ;                //checks if destination has same color of the piece if so it restarts as cannot capture
             }
         }
     }
@@ -706,6 +751,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[x2][i]=='b'||board[x2][i]=='k')
                         {
                             player1Move();
+                            return ;
                         }
                     }
                 }
@@ -723,6 +769,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[x2][i]=='b'||board[x2][i]=='k')
                         {
                             player1Move();
+                            return ;
                         }
                     }
                 }
@@ -743,6 +790,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[i][y2]=='b'||board[i][y2]=='k')
                         {
                             player1Move();
+                            return ;
                         }
 
                     }
@@ -761,6 +809,7 @@ void straight(int y1,int y2,int x1,int x2)
                                 ||board[i][y2]=='b'||board[i][y2]=='k')
                         {
                             player1Move();
+                            return ;
                         }
 
                     }
@@ -770,7 +819,8 @@ void straight(int y1,int y2,int x1,int x2)
         }
         if(board[x2][y2]=='r'||board[x2][y2]=='b'||board[x2][y2]=='p'||board[x2][y2]=='k'||board[x2][y2]=='h'||board[x2][y2]=='q')
         {
-            player1Move();                             //checks if destination has same color of the piece if so it restarts as cannot capture
+            player1Move();
+            return ;                             //checks if destination has same color of the piece if so it restarts as cannot capture
         }
     }
 
@@ -813,19 +863,12 @@ int main()
          player2Win=false,
          stalemate=false;
     // Functions Call
-    printboard(8,8,board,deadPieces);
-
-
     while(gameOver==false)
     {
-        printf("\n\n");
         player1Move();
-        printboard();
         if(gameOver==true)
             break;
-        printf("\n\n");
         player2Move();
-        printboard();
     }
     if (player1Win==true)
     {
