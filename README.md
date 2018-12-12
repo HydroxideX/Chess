@@ -1,230 +1,831 @@
-# Chess
-This is a Chess game made by using C programming language
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-char board[8][8]={{'R','H','B','Q','K','B','H','R'},{'P','P','P','P','P','P','P','P'},
-{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'},
-{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'},
-{'p','p','p','p','p','p','p','p'},{'r','h','b','q','k','b','h','r'}};
-char deadPieces[32]={' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-' ',' ',' ',' ',' ',' ',' '};
-char boardlayout[8][8]={{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'},
-{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'},
-{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'},
-{'.','-','.','-','.','-','.','-'},{'-','.','-','.','-','.','-','.'}};
-int n=8,m=8;
-/**********************************************************************************
+char board[8][8]=
+{
+    {'R','H','B','Q','K','B','H','R'},
+    {'P','P','P','P','P','P','P','P'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'p','p','p','p','p','p','p','p'},
+    {'r','h','b','q','k','b','h','r'}
+};
 
-***********************************************************************************/
-/**********************************************************************************
-*      clears output and prints the full board after each move for sure           *
-***********************************************************************************/
+char deadPieces[32]= {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '
+                      ,' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '
+                      ,' ',' ',' ',' ',' ',' ',' '
+                     };
+
+char boardlayout[8][8]=
+{
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'}
+};
+
+
+int n=8;
+int m=8;
+int deadindex=0;
 void printboard()
 {
-system("cls");
-int row,column;
-for(row=0;row<32;row++)
-    printf("%c ",deadPieces[row]);
-printf("\n    A   B   C   D   E   F   G   H \n");
-printf("    _   _   _   _   _   _   _   _ ");
+    /*  ***************************************************** PLAYER 1 RELATED ******************************************************* */
 
-for(row=0;row<n;row++)
-{
-printf("\n\n");
-printf("%d ",row+1);
-printf("|");
-    for(column=0;column<m;column++)
+    system("cls");
+    int row,column;
+    printf("Dead Pieces:");
+//printf("\n");
+    for(row=0; row<32; row++)
+        printf("%c ",deadPieces[row]);
+    printf("\n\n    A   B   C   D   E   F   G   H \n");
+    printf("  ________________________________");
+
+    for(row=0; row<n; row++)
     {
-
-        printf(" %c |",board[row][column]);
+        printf("\n");
+        printf("%d ",row+1);
+        printf("|");
+        for(column=0; column<m; column++)
+        {
+            printf(" %c |",board[row][column]);
+        }
+        printf("\n");
+        printf("  |_______________________________|");
     }
-    printf("\n");
-    printf("    _   _   _   _   _   _   _   _ ");
 }
+void pawnP1(int y1,int y2,int x1,int x2,int deadindex)   //#3rft el deadindex ka static 3shan keda sheloh
+{
+    if(board[x2][y2] == 'P')
+        deadPieces[deadindex++] = 'P';
+    else if(board[x2][y2] == 'R')
+        deadPieces[deadindex++] = 'R';
+    else if(board[x2][y2] == 'H')
+        deadPieces[deadindex++] = 'H';
+    else if(board[x2][y2] == 'B')
+        deadPieces[deadindex++] = 'B';
+    else if(board[x2][y2] == 'Q')
+        deadPieces[deadindex++] = 'Q';
+    else if(board[x2][y2] == 'K')                  //#El king mbytshalsh
+        deadPieces[deadindex++] = 'K';
+    if ( x1 == 6 )
+    {
+        if(y1 == y2 && x2 >=4)
+        {
+            board[x2][y2] = 'p';
+            board[x1][y1] = boardlayout[x1][y1];
+            printboard(8,8,board,deadPieces);
+        }
+        else
+            printf("INVALID MOVE");
+    }
+    else if(x1<6)
+    {
+        if(y1 == y2 && x1==x2+1)
+        {
+            board[x2][y2] = 'p';
+            board[x1][y1] = boardlayout[x1][y1];
+            printboard(8,8,board,deadPieces);
+        }
+        else
+            printf("INVALID MOVE");
+    }
+
+    /*   if ( x1 == 6 )
+       {
+          /* if(board[x2][y2] = 'p' && y1 == y2 && x2 <=4 && x1)
+           {
+               deadPieces[n++]= 'p';
+               board[x2][y2] = 'p';
+               board[x1][y1] = boardlayout[x1][y1];
+               printboard(8,8,board,deadPieces);
+           }
+
+            if(y1 == y2 && x2 <=4)
+           {
+               if(board[x2++][y2++] = 'p')
+               {
+                   deadPieces[n++]= 'p';
+               }
+               board[x2][y2] = 'p';
+               board[x1][y1] = boardlayout[x1][y1];
+               printboard(8,8,board,deadPieces);
+           }
+           else
+               printf("Error");
+       }
+       */
+
+    printboard(8,8,board,deadPieces);
+
 }
-/***********************************************************************************************
- *c1 is first character input,c2 is second ,n1 is first number input, n2 is second number input*
- ***********************************************************************************************/
+void CheckDead(int y1,int y2,int x1,int x2)
+{
+    int n=0;
+    if(board[x2][y2] == board[x2][y2] == 'p')
+    {
+        deadPieces[n++] ='p';
+    }
+}
 void player1Move()
 {
-int n1,n2;
-char c1,c2;
-printf("Player 1 :");
-scanf("%c",&c1);
-if(c1=='u')
-{   //****************
-    return ;
-}
-scanf("%d%c%d",&n1,&c2,&n2);
-n1--;
-n2--;
-c1=c1-'A';
-c2=c2-'A';
-while(c1>7||c1<0||c2>7||c2<0||n1>7||n1<0||n2>7||n2<0)
-{
-    printf("Player 1 :");
+    int n1,n2;
+    char c1,c2,c3;
+    printf("\n");
+// Positions
+   /* printf("PLAYER 1");
+    printf("\n");
+    printf("Enter x1 (Current Piece Row) : ");
+    scanf("%d",&n1);
+    printf("Enter y1 (Current Piece Column) : ");
+    scanf(" %c",&c1);
+
+    printf("Enter x2 ( Row To Move ) : ");
+    scanf("%d",&n2);
+    printf("Enter y2 ( Column To Move ) : ");
+    scanf(" %c",&c2);*/
+    printf("Player 1:");
     scanf("%c%d%c%d",&c1,&n1,&c2,&n2);
+//  Important To Solve Index Problem
     n1--;
     n2--;
+    int x1=n1;
+    int x2=n2;
     c1=c1-'A';
     c2=c2-'A';
+// To Solve Conflict Between Character And Integer
+    int y1 = c1;
+    int y2= c2;
+    printf("\n");
+
+    /*        PAWN PAWN PAWN PAWN        */
+
+// Checking If It Is Pawn And If True It Must Be At Row 7 That Means x1=6 Else Give Error
+
+    pawnP1(y1,y2,x1,x2,0);                   //#3rft el deadindex ka static 3shan keda sheloh
+    rook1(y1,y2,x1,x2);
+    bishop1(y1,y2,x1,x2);
+    horse1(y1,y2,x1,x2);
+
+
+
+
+    /*
+    while(y1>7||y1<0||y2>7||y2<0||x1>7||x1<0||x2>7||x2<0)
+    {
+        printf("Player 1 :");
+        scanf("%c%d%c%d",&y1,&x1,&y2,&x2);
+        x1--;
+        x2--;
+        y1=y1-'A';
+        y2=y2-'A';
+    }
+    */
+
+
 }
+/* ****************************************************** PLAYER 2 RELATED *************************************************** */
+void pawnP2(int y1,int y2,int x1,int x2,int deadindex)
+{
+    //Dead Conditions
+    if(board[x2][y2] == 'p')
+        deadPieces[deadindex++] = 'p';
+    else if(board[x2][y2] == 'r')
+        deadPieces[deadindex++] = 'r';
+    else if(board[x2][y2] == 'h')
+        deadPieces[deadindex++] = 'h';
+    else if(board[x2][y2] == 'b')
+        deadPieces[deadindex++] = 'b';
+    else if(board[x2][y2] == 'q')
+        deadPieces[deadindex++] = 'q';
+    else if(board[x2][y2] == 'k')
+        deadPieces[deadindex++] = 'k';  // el king mbytshalsh
+    if ( x1 == 1 )
+    {
+        if(y1 == y2 && x2 <=3)
+        {
+            board[x2][y2] = 'P';
+            board[x1][y1] = boardlayout[x1][y1];
+            printboard(8,8,board,deadPieces);
+        }
+        else
+            printf("Error");
+    }
+    else if(x1>1)
+    {
+        if(y1 == y2 && x2==x1+1)
+        {
+            board[x2][y2] = 'P';
+            board[x1][y1] = boardlayout[x1][y1];
+            printboard(8,8,board,deadPieces);
+        }
+        else
+            printf("Error");
+    }
+
+
 }
 void player2Move()
 {
-printf("\n");
-int n1,n2;
-char c1,c2;
-printf("Player 2 :");
-scanf("%c%d%c%d",&c1,&n1,&c2,&n2);
-n1--;
-n2--;
-c1=c1-'A';
-c2=c2-'A';
-while(c1>7||c1<0||c2>7||c2<0||n1>7||n1<0||n2>7||n2<0)
-{
-    printf("Player 2 :");
+// Example Variables : y1 ( pawn ) x1 (pawn  raw )  x2 ( where to move)  y2 ( where to move )
+    int n1,n2;
+    char c1,c2,c3;
+    printf("\n");
+// Positions
+    /*printf("PLAYER 2");
+    printf("\n");
+    printf("Enter Current Piece Row: ");
+    scanf("%d",&n1);
+    printf("\n");
+    printf("Enter Current Piece Column: ");
+    scanf(" %c",&c1);
+    printf("\n");
+
+    printf("Enter Row To Move : ");
+    scanf("%d",&n2);
+    printf("\n");
+    printf("Enter Column To Move  : ");
+    scanf(" %c",&c2);
+    printf("\n");*/
+     printf("Player 2:");
     scanf("%c%d%c%d",&c1,&n1,&c2,&n2);
+//  Important To Solve Index Problem
     n1--;
     n2--;
     c1=c1-'A';
     c2=c2-'A';
-}
-}
-void rook(char c1,char c2,int n1,int n2)
-{
-    int dif;
-    if(c1==c2)
-    {
-    dif=n2-n1;
-    diff( dif, c1, c2, n1, n2);
-    revdiff( dif, c1, c2, n1, n2);
-    }
-    if(n1==n2)
-    {
-    dif=c2-c1;
-    diff( dif, c1, c2, n1, n2);
-    revdiff( dif, c1, c2, n1, n2);
-    }
-}
-void diff(int dif,char c1,char c2,int n1,int n2)
-{
-   if(dif%2==0&&(board[n1][c1]=='R'||board[n1][c1]=='r'))
-    {
-       if((board[n2][c2]=='-'||board[n2][c2]=='p'||board[n2][c2]=='q'||board[n2][c2]=='b'
-                ||board[n2][c2]=='h'||board[n2][c2]=='r')&&board[n1][c1]=='R')
-       {
-           board[n2][c2]='R';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='.'||board[n2][c2]=='p'||board[n2][c2]=='q'||board[n2][c2]=='b'
-                ||board[n2][c2]=='h'||board[n2][c2]=='r')&&board[n1][c1]=='R')
-       {
-           board[n2][c2]='R';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='-'||board[n2][c2]=='P'||board[n2][c2]=='Q'||board[n2][c2]=='B'
-                ||board[n2][c2]=='H'||board[n2][c2]=='R')&&board[n1][c1]=='r')
-       {
-           board[n2][c2]='r';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='.'||board[n2][c2]=='P'||board[n2][c2]=='Q'||board[n2][c2]=='B'
-                ||board[n2][c2]=='H'||board[n2][c2]=='R')&&board[n1][c1]=='r')
-       {
-           board[n2][c2]='r';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-    }
-    else if(dif%2==0&&(board[n1][c1]=='q'||board[n1][c1]=='Q'))
-    {
-        if((board[n2][c2]=='-'||board[n2][c2]=='p'||board[n2][c2]=='q'||board[n2][c2]=='b'
-                ||board[n2][c2]=='h'||board[n2][c2]=='q')&&board[n1][c1]=='Q')
-       {
-           board[n2][c2]='Q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='.'||board[n2][c2]=='p'||board[n2][c2]=='q'||board[n2][c2]=='b'
-                ||board[n2][c2]=='h'||board[n2][c2]=='q')&&board[n1][c1]=='Q')
-       {
-           board[n2][c2]='Q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='-'||board[n2][c2]=='P'||board[n2][c2]=='Q'||board[n2][c2]=='B'
-                ||board[n2][c2]=='H'||board[n2][c2]=='R')&&board[n1][c1]=='q')
-       {
-           board[n2][c2]='q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if((board[n2][c2]=='.'||board[n2][c2]=='P'||board[n2][c2]=='Q'||board[n2][c2]=='B'
-                ||board[n2][c2]=='H'||board[n2][c2]=='R')&&board[n1][c1]=='q')
-       {
-           board[n2][c2]='q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-    }
-}
-void revdiff(int dif,char c1,char c2,int n1,int n2)
-{
-     if(dif%2==1&&(board[n1][c1]=='R'||board[n1][c1]=='r'))
-    {
-       if(board[n2][c2]=='-'&&board[n1][c1]=='R')
-       {
-           board[n2][c2]='R';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='.'&&board[n1][c1]=='R')
-       {
-           board[n2][c2]='R';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='-'&&board[n1][c1]=='r')
-       {
-           board[n2][c2]='r';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='.'&&board[n1][c1]=='r')
-       {
-           board[n2][c2]='r';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-    }
-    else if(dif%2==1&&(board[n1][c1]=='Q'||board[n1][c1]=='q'))
-    {
-       if(board[n2][c2]=='-'&&board[n1][c1]=='Q')
-       {
-           board[n2][c2]='Q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='.'&&board[n1][c1]=='Q')
-       {
-           board[n2][c2]='Q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='-'&&board[n1][c1]=='q')
-       {
-           board[n2][c2]='q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-       else if(board[n2][c2]=='.'&&board[n1][c1]=='q')
-       {
-           board[n2][c2]='q';
-           board[n1][c1]=boardlayout[n1][c1];
-       }
-    }
-}
-int main()
-{   bool gameOver=false,player1Win=false,player2Win=false,stalemate=false;
+    int x1=n1,x2=n2;
+// To Solve Conflict Between Character And Integer
+    int y1 = c1;
+    int y2= c2;
+    printf("\n");
 
+    /*        PAWN PAWN PAWN PAWN        */
+
+// Checking If It Is Pawn And If True It Must Be At Row 7 That Means x1=6 Else Give Error
+
+    pawnP2(y1,y2,x1,x2,0);      //sheel el dead index
+    rook2(y1,y2,x1,x2);
+    bishop2(y1,y2,x1,x2);
+    horse2(y1,y2,x1,x2);
+
+}
+/**********************************************************************************
+*The Horse Has Eight Available Moves At Max if the Square is blocked by one of    *
+*  your pieces then it takes input again if not it captures it                    *
+***********************************************************************************/
+void horse1(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='h')
+    {
+        if(x2-x1==1&&abs(y2-y1)==2||x2-x1==2&&abs(y2-y1)==1||x2-x1==-1&&abs(y2-y1)==2||x2-x1==-2&&abs(y2-y1)==1)       //its rows and columns change by 1 or 2 (always different)
+        {
+            if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='b'||board[x2][y2]=='h'||board[x2][y2]=='p'||board[x2][y2]=='r')
+            {
+                player1Move();
+            }
+            if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+            board[x2][y2]=board[x1][y1];
+            board[x1][y1]=boardlayout[x1][y1];
+        }
+        else{player1Move();}
+    }
+
+
+}
+void horse2(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='H')
+    {
+        if(x2-x1==1&&abs(y2-y1)==2||x2-x1==2&&abs(y2-y1)==1||x2-x1==-1&&abs(y2-y1)==2||x2-x1==-2&&abs(y2-y1)==1)       //its rows and columns change by 1 or 2 (always different)
+        {
+            if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='B'||board[x2][y2]=='H'||board[x2][y2]=='P'||board[x2][y2]=='R')
+            {
+                player2Move();
+            }
+            if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+            board[x2][y2]=board[x1][y1];
+            board[x1][y1]=boardlayout[x1][y1];
+        }
+        else{player2Move();}
+        }
+
+
+}
+void bishop1(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='b'||board[x1][y1]=='q')
+    {
+        if((x2-x1)==(y2-y1))            //if diff between rows=diff between columns then it is correct move else it restarts
+        {
+            diagonal(y1,y2,x1,x2);
+        }
+        else
+        {
+            player1Move();
+        }
+    }
+
+    }
+void bishop2(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='B'||board[x1][y1]=='Q')   //if diff between rows=diff between columns then it is correct move else it restarts
+    {
+        if((x2-x1)==(y2-y1))
+        {
+            diagonal(y1,y2,x1,x2);
+        }
+        else
+        {
+            player2Move();
+        }
+    }
+    }
+/**********************************************************************************
+*This Function Moves Both The bishop or The Queen Diagonally for                  *
+*both Players if its an empty space it takes it if it is enemy piece it captures  *
+*if its this player's piece it restarts and take the player Move Again            *
+*if it there are pieces in between the original and destination it restarts too   *
+***********************************************************************************/
+void diagonal(int y1,int y2,int x1,int x2)
+{
+    int i,j;
+    if(x2>x1)   //checks if  rows inc(moves diagonally downwards)
+    {
+        if(y2>y1)           //checks if columns inc (right)
+        {
+            i=x1+1;
+            j=y1+1;
+            if(board[x1][y1]=='b'||board[x1][y1]=='q')
+            {
+                //keeps checking if there is a piece in the way to destination
+                while(i<x2)
+                {
+                    if(board[i][j]=='k'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i++;
+                    j++;
+                }
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                {
+                    player1Move();  //checks if piece of the same color is on destination
+                }
+            }
+            else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
+            {
+                while(i<x2)  //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='K'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i++;
+                    j++;
+                }
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                {
+                    player1Move();
+                }
+            }
+        }
+        else if(y1>y2) //checks if columns dec (left)
+        {
+            i=x1+1;
+            j=y1-1;
+            if(board[x1][y1]=='b'||board[x1][y1]=='q')
+            {
+                while(i<x2)    //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='k'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i++;
+                    j--;
+                }
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                {
+                    player1Move();  //checks if piece of the same color is on destination
+                }
+            }
+            else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
+            {
+                while(i<x2)   //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='K'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i++;
+                    j--;
+                }
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                {
+                    player1Move();//checks if piece of the same color is on destination
+                }
+            }
+        }
+    }
+    else if(x1>x2)  //if rows dec (moves up)
+    {
+        if(y2>y1)   //if columns  inc (moves right)
+        {
+            i=x1-1;
+            j=y1+1;
+            if(board[x1][y1]=='b'||board[x1][y1]=='q')
+            {
+                while(i>x2)   //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='k'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i--;
+                    j++;
+                }
+                if(board[x1][y1]=='k'||board[x1][y1]=='q'||board[x1][y1]=='p'||board[x1][y1]=='b'||board[x1][y1]=='r')
+                {
+                    player1Move(); //checks if piece of the same color is on destination
+                }
+            }
+            else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
+            {
+                while(i>x2)     //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='K'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i--;
+                    j++;
+                }
+                if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='P'||board[x1][y1]=='B'||board[x1][y1]=='R')
+                {
+                    player1Move();  //checks if piece of the same color is on destination
+                }
+            }
+        }
+        else if(y1>y2)  //if columns  dec (moves left)
+        {
+            i=x1-1;
+            j=y1-1;
+            if(board[x1][y1]=='b'||board[x1][y1]=='q')
+            {
+                while(i>x2)    //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='k'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i--;
+                    j--;
+                }
+                if(board[x1][y1]=='k'||board[x1][y1]=='q'||board[x1][y1]=='p'||board[x1][y1]=='b'||board[x1][y1]=='r')
+                {
+                    player1Move();   //checks if piece of the same color is on destination
+                }
+            }
+            else if(board[x1][y1]=='B'||board[x1][y1]=='Q')
+            {
+                while(i>x2)   //keeps checking if there is a piece in the way to destination
+                {
+                    if(board[i][j]=='K'||board[i][j]=='Q'||board[i][j]=='q'
+                            ||board[i][j]=='r'||board[i][j]=='b'||board[i][j]=='B'
+                            ||board[i][j]=='R'||board[i][j]=='p'||board[i][j]=='P'
+                            ||board[i][j]=='h'||board[i][j]=='H')
+                    {
+                        player1Move();
+                    }
+                    i--;
+                    j--;
+                }
+                if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='P'||board[x1][y1]=='B'||board[x1][y1]=='R')
+                {
+                    player1Move();   //checks if piece of the same color is on destination
+                }
+            }
+        }
+    }
+    if (board[x1][y1]=='b')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='b';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if (board[x1][y1]=='B')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='B';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if (board[x1][y1]=='q')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='q';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if (board[x1][y1]=='Q')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='Q';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+}
+void rook2(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='R'||board[x1][y1]=='Q')              //if black rook
+    {
+        if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+        {
+            straight( y1, y2, x1, x2);
+        }
+
+        else                    //if wrong input restarts player 1
+        {
+            player2Move();
+        }
+    }
+
+    }
+void rook1(int y1,int y2,int x1,int x2)
+{
+    if(board[x1][y1]=='r'||board[x1][y1]=='q')             //if white rook
+    {
+        if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+        {
+            straight( y1, y2, x1, x2);
+        }
+        else                    //if wrong input restarts player 1
+        {
+            player1Move();
+        }
+    }
+
+}
+/**********************************************************************************
+*This Function Moves Both The Rook or The Queen Vertically or Horizontally for    *
+*both Players if its an empty space it takes it if it is enemy piece it captures  *
+*if its this player's piece it restarts and take the player Move Again            *
+*if it there are pieces in between the original and destination it restarts too   *
+***********************************************************************************/
+void straight(int y1,int y2,int x1,int x2)
+{
+    int i;
+    if(board[x1][y1]=='R'||board[x1][y1]=='Q')
+    {
+        if(x1==x2)
+        {
+            if(y2>y1)       //checks if there are pieces between start and end
+            {
+                i=y1+1;
+                for(; i<y2 ; i++)
+                {
+                    if(board[x1][y1]=='R'||board[x1][y1]=='Q')
+                    {
+                        if (board[x2][i]=='Q'||board[x2][i]=='R'||board[x2][i]=='B'
+                                ||board[x2][i]=='P'||board[x2][i]=='H'||board[x2][i]=='p'
+                                ||board[x2][i]=='r'||board[x2][i]=='h'||board[x2][i]=='q'
+                                ||board[x2][i]=='b'||board[x2][i]=='K')
+                        {
+                            player2Move();
+                        }
+                    }
+
+                }
+            }
+            if(y1>y2)       //checks if there are pieces between start and end
+            {
+                i=y2+1;
+                for(; i<y1; i++)
+                {
+                    if(board[x1][y1]=='R'||board[x1][y1]=='Q')
+                    {
+                        if (board[x2][i]=='Q'||board[x2][i]=='R'||board[x2][i]=='B'
+                                ||board[x2][i]=='P'||board[x2][i]=='H'||board[x2][i]=='p'
+                                ||board[x2][i]=='r'||board[x2][i]=='h'||board[x2][i]=='q'
+                                ||board[x2][i]=='b'||board[x2][i]=='K')
+                        {
+                            player2Move();
+                        }
+                    }
+
+                }
+            }
+        }
+        else if (y1==y2)
+        {
+            if(x2>x1)
+            {
+                i=x1+1;
+                for(; i<x2; i++)                                           //checks if there are pieces between start and end
+                {
+                    if(board[x1][y1]=='R'||board[x1][y1]=='Q')
+                    {
+                        if (board[i][y2]=='Q'||board[i][y2]=='R'||board[i][y2]=='B'
+                                ||board[i][y2]=='P'||board[i][y2]=='H'||board[i][y2]=='p'
+                                ||board[i][y2]=='r'||board[i][y2]=='h'||board[i][y2]=='q'
+                                ||board[i][y2]=='b'||board[i][y2]=='K')
+                        {
+                            player2Move();
+                        }
+                    }
+                }
+            }
+            else if(x1>x2)
+            {
+                i=x2+1;
+                for(; i<x1; i++)                                           //checks if there are pieces between start and end
+                {
+                    if(board[x1][y1]=='R'||board[x1][y1]=='Q')
+                    {
+                        if (board[i][y2]=='Q'||board[i][y2]=='R'||board[i][y2]=='B'
+                                ||board[i][y2]=='P'||board[i][y2]=='H'||board[i][y2]=='p'
+                                ||board[i][y2]=='r'||board[i][y2]=='h'||board[i][y2]=='q'
+                                ||board[i][y2]=='b'||board[i][y2]=='K')
+                        {
+                            player2Move();
+                        }
+                    }
+                }
+            }
+            if(board[x2][y2]=='R'||board[x2][y2]=='B'||board[x2][y2]=='P'||board[x2][y2]=='K'||board[x2][y2]=='H'||board[x2][y2]=='Q')
+            {
+                player2Move();           //checks if destination has same color of the piece if so it restarts as cannot capture
+            }
+        }
+    }
+    if (board[x1][y1]=='r'||board[x1][y1]=='q')
+    {
+        if(x1==x2)
+        {
+            if(y2>y1)
+            {
+                i=y1+1;
+                for(; i<y2; i++)                       //checks if there are pieces between start and end
+                {
+                    if(board[x1][y1]=='r'||board[x1][y1]=='q')
+                    {
+                        if (board[x2][i]=='Q'||board[x2][i]=='R'||board[x2][i]=='B'
+                                ||board[x2][i]=='P'||board[x2][i]=='H'||board[x2][i]=='p'
+                                ||board[x2][i]=='r'||board[x2][i]=='h'||board[x2][i]=='q'
+                                ||board[x2][i]=='b'||board[x2][i]=='k')
+                        {
+                            player1Move();
+                        }
+                    }
+                }
+            }
+            else if(y1>y2)
+            {
+                i=y2+1;
+                for(; i<y1; i++)            //checks if there are pieces between start and end if so restart
+                {
+                    if(board[x1][y1]=='r'||board[x1][y1]=='q')
+                    {
+                        if (board[x2][i]=='Q'||board[x2][i]=='R'||board[x2][i]=='B'
+                                ||board[x2][i]=='P'||board[x2][i]=='H'||board[x2][i]=='p'
+                                ||board[x2][i]=='r'||board[x2][i]=='h'||board[x2][i]=='q'
+                                ||board[x2][i]=='b'||board[x2][i]=='k')
+                        {
+                            player1Move();
+                        }
+                    }
+                }
+            }
+        }
+        else if (y1==y2)
+        {
+            if(x2>x1)
+            {
+                i=x1+1;
+                for(; i<x2; i++)
+                {
+                    if(board[x1][y1]=='r'||board[x1][y1]=='q')          //checks if there are pieces between start and end
+                    {
+                        if (board[i][y2]=='Q'||board[i][y2]=='R'||board[i][y2]=='B'
+                                ||board[i][y2]=='P'||board[i][y2]=='H'||board[i][y2]=='p'
+                                ||board[i][y2]=='r'||board[i][y2]=='h'||board[i][y2]=='q'
+                                ||board[i][y2]=='b'||board[i][y2]=='k')
+                        {
+                            player1Move();
+                        }
+
+                    }
+                }
+            }
+            else  if(x1>x2)
+            {
+                i=x2+1;
+                for(; i<x1; i++)
+                {
+                    if(board[x1][y1]=='r'||board[x1][y1]=='q')          //checks if there are pieces between start and end
+                    {
+                        if (board[i][y2]=='Q'||board[i][y2]=='R'||board[i][y2]=='B'
+                                ||board[i][y2]=='P'||board[i][y2]=='H'||board[i][y2]=='p'
+                                ||board[i][y2]=='r'||board[i][y2]=='h'||board[i][y2]=='q'
+                                ||board[i][y2]=='b'||board[i][y2]=='k')
+                        {
+                            player1Move();
+                        }
+
+                    }
+                }
+            }
+
+        }
+        if(board[x2][y2]=='r'||board[x2][y2]=='b'||board[x2][y2]=='p'||board[x2][y2]=='k'||board[x2][y2]=='h'||board[x2][y2]=='q')
+        {
+            player1Move();                             //checks if destination has same color of the piece if so it restarts as cannot capture
+        }
+    }
+
+    if(board[x1][y1]=='R')   //checks if piece is rook then replaces with whatever on the other location
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='R';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if(board[x1][y1]=='r')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='r';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if(board[x1][y1]=='Q')   //checks if piece is Queen then replaces with whatever on the other location
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='Q';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+    else if(board[x1][y1]=='q')
+    {
+        if(board[x2][y2]!='-'&&board[x2][y2]!='.')
+            deadPieces[deadindex++]=board[x2][y2];
+        board[x2][y2]='q';
+        board[x1][y1]=boardlayout[x1][y1];
+    }
+}
+
+int main()
+{
+    // Variables
+    int i;
+    bool gameOver=false,
+         player1Win=false,
+         player2Win=false,
+         stalemate=false;
+    // Functions Call
     printboard(8,8,board,deadPieces);
+
+
     while(gameOver==false)
-    {   printf("\n\n");
+    {
+        printf("\n\n");
         player1Move();
+        printboard();
         if(gameOver==true)
             break;
         printf("\n\n");
         player2Move();
+        printboard();
     }
     if (player1Win==true)
     {
@@ -238,5 +839,6 @@ int main()
     {
         printf("Stalemate");
     }
+
     return 0;
 }
