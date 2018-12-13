@@ -44,12 +44,12 @@ char boardlayout[8][8]=
 };
 
 int blackMoves[12][12]= {{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
-,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
-,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1}
+    ,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
+    ,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1}
 };
 int whiteMoves[12][12]= {{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
-,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
-,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1}
+    ,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,0,0,0,0,0,0,0,0,1,1}
+    ,{1,1,0,0,0,0,0,0,0,0,1,1},{1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1}
 };
 int n=8;
 int m=8;
@@ -162,13 +162,13 @@ void player1Move()
     if(blackMoves[kingsindex[0]+2][kingsindex[1]+2]==1)
     {
         if(blackMoves[kingsindex[0]+2][kingsindex[1]+2+1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2][kingsindex[1]+2-1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2+1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2-1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2+1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
-        if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2);
+            if(blackMoves[kingsindex[0]+2][kingsindex[1]+2-1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2+1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                    if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2-1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                        if(blackMoves[kingsindex[0]+2+1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                            if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2+1]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                                if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2)
+                                    if(blackMoves[kingsindex[0]+2-1][kingsindex[1]+2]==1||blackMoves[kingsindex[0]+2][kingsindex[1]+2]==2);
 
     }
     if(blackMoves[kingsindex[0]+2][kingsindex[1]+2]==1)
@@ -326,29 +326,29 @@ void player2Move()
     int n1,n2;
     char c1,c2;
     blackDanger();
-     /*if(whiteMoves[kingsindex[2]+2][kingsindex[3]+2]==1)
+    /*if(whiteMoves[kingsindex[2]+2][kingsindex[3]+2]==1)
     {
-        for(i=0; i<8; i++)
-        {
-            for(j=0; j<8; j++)
-            {
-                temparr[i][j]=board[i][j];
-            }
-        }
-        while(whiteMoves[kingsindex[2]+2][kingsindex[3]+2]==1)
-        {
-            for(i=0; i<8; i++)
-            {
-                for(j=0; j<8; j++)
-                {
-                    board[i][j]=temparr[i][j];
-                }
-            }
-            printf("\n\nCheck\n");
-            player2Movetemp();
-            blackDanger();
-        }
-        return ;
+       for(i=0; i<8; i++)
+       {
+           for(j=0; j<8; j++)
+           {
+               temparr[i][j]=board[i][j];
+           }
+       }
+       while(whiteMoves[kingsindex[2]+2][kingsindex[3]+2]==1)
+       {
+           for(i=0; i<8; i++)
+           {
+               for(j=0; j<8; j++)
+               {
+                   board[i][j]=temparr[i][j];
+               }
+           }
+           printf("\n\nCheck\n");
+           player2Movetemp();
+           blackDanger();
+       }
+       return ;
     }*/
     printboard();
 // Positions
@@ -1113,38 +1113,41 @@ void horse2(int y1,int y2,int x1,int x2)
 
 }
 void bishop1(int y1,int y2,int x1,int x2)
-{   if(abs(x2-x1)==abs(y2-y1))
-    {if(board[x1][y1]=='b'||board[x1][y1]=='q')
+{
+    if(abs(x2-x1)==abs(y2-y1))
     {
-        if(abs(x2-x1)==abs(y2-y1))            //if diff between rows=diff between columns then it is correct move else it restarts
+        if(board[x1][y1]=='b'||board[x1][y1]=='q')
         {
-            diagonal(y1,y2,x1,x2);
+            if(abs(x2-x1)==abs(y2-y1))            //if diff between rows=diff between columns then it is correct move else it restarts
+            {
+                diagonal(y1,y2,x1,x2);
+            }
+            else
+            {
+                player1Move();
+                return ;
+            }
         }
-        else
-        {
-            player1Move();
-            return ;
-        }
-    }
     }
 }
 void bishop2(int y1,int y2,int x1,int x2)
-{   if(abs(x2-x1)==abs(y2-y1))
 {
-
-    if(board[x1][y1]=='B'||board[x1][y1]=='Q')   //if diff between rows=diff between columns then it is correct move else it restarts
+    if(abs(x2-x1)==abs(y2-y1))
     {
-        if(abs(x2-x1)==abs(y2-y1))
+
+        if(board[x1][y1]=='B'||board[x1][y1]=='Q')   //if diff between rows=diff between columns then it is correct move else it restarts
         {
-            diagonal(y1,y2,x1,x2);
-        }
-        else
-        {
-            player2Move();
-            return ;
+            if(abs(x2-x1)==abs(y2-y1))
+            {
+                diagonal(y1,y2,x1,x2);
+            }
+            else
+            {
+                player2Move();
+                return ;
+            }
         }
     }
-}
 }
 /**********************************************************************************
 *This Function Moves Both The bishop or The Queen Diagonally for                  *
@@ -1380,36 +1383,41 @@ void diagonal(int y1,int y2,int x1,int x2)
     }
 }
 void rook2(int y1,int y2,int x1,int x2)
-{   if(x1==x2||y1==y2)
-    {if(board[x1][y1]=='R'||board[x1][y1]=='Q')              //if black rook
+{
+    if(x1==x2||y1==y2)
     {
-        if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+        if(board[x1][y1]=='R'||board[x1][y1]=='Q')              //if black rook
         {
-            straight( y1, y2, x1, x2);
-        }
+            if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+            {
+                straight( y1, y2, x1, x2);
+            }
 
-        else                    //if wrong input restarts player 1
-        {
-            player2Move();
-            return ;
+            else                    //if wrong input restarts player 1
+            {
+                player2Move();
+                return ;
+            }
         }
-    }
     }
 }
 void rook1(int y1,int y2,int x1,int x2)
-{    if(x1==x2||y1==y2)
-    {if(board[x1][y1]=='r'||board[x1][y1]=='q')             //if white rook
+{
+    if(x1==x2||y1==y2)
     {
-        if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+        if(board[x1][y1]=='r'||board[x1][y1]=='q')             //if white rook
         {
-            straight( y1, y2, x1, x2);
+            if(y1==y2||x1==x2)                             //if it will move vertically or horizontally
+            {
+                straight( y1, y2, x1, x2);
+            }
+            else                    //if wrong input restarts player 1
+            {
+                player1Move();
+                return ;
+            }
         }
-        else                    //if wrong input restarts player 1
-        {
-            player1Move();
-            return ;
-        }
-    }}
+    }
 
 }
 /**********************************************************************************
