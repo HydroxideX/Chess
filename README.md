@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -136,6 +137,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
         char upgrade1;
         if(y1!=y2)
         {
+
             if(board[x2][y2] == 'P')
                 deadPieces[deadindex++] = 'P';
             else if(board[x2][y2] == 'R')
@@ -1438,8 +1440,12 @@ bool king2Possiblemoves()
             }
 
         }
+=======
+        
     }
+
 }
+
 void player1Move()
 {
 
@@ -1490,9 +1496,11 @@ void player1Move()
     printf("Enter x2 ( Row To Move ) : ");
     scanf("%d",&n2);
     printf("Enter y2 ( Column To Move ) : ");
+
     scanf(" %c",&c2);*/
     printf("Player1");
     scanf(" %c%d%c%d",&c1,&n1,&c2,&n2);
+
 
     n1--;
     n2--;
@@ -1561,6 +1569,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
         //Dead Conditions
         if(y1!=y2)
         {
+
             if(board[x2][y2] == 'p')
                 deadPieces[deadindex++] = 'p';
             else if(board[x2][y2] == 'r')
@@ -1571,6 +1580,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 deadPieces[deadindex++] = 'b';
             else if(board[x2][y2] == 'q')
                 deadPieces[deadindex++] = 'q';
+
         }
 
 
@@ -1578,12 +1588,15 @@ void pawnP2(int y1,int y2,int x1,int x2)
         {
             if(y1!=y2 && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.')
             {
+
                 if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
                 {
+
                     board[x2][y2] = 'P';
                     board[x1][y1] = boardlayout[x1][y1];
                     printboard(8,8,board,deadPieces);
                     return;
+
                 }
                 else
                 {
@@ -1593,12 +1606,15 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 }
             }
             else if(y1 == y2 && x2 <=3 && x2>x1 && board[x2][y2] == '-')
+
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
                 printboard(8,8,board,deadPieces);
             }
+
             else if(y1 == y2 && x2 <=3 && x2>x1 && board[x2][y2] == '.')
+
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
@@ -1606,14 +1622,17 @@ void pawnP2(int y1,int y2,int x1,int x2)
             }
             else
             {
+
                 printf("INVALID MOVE");
                 player2Move();
                 return;
+
             }
         }
 
         if(x1>1)
         {
+
             if(y1!=y2 && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.')
             {
                 if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
@@ -1630,12 +1649,15 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 }
             }
             else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '-')
+
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
                 printboard(8,8,board,deadPieces);
             }
+
             else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '.')
+
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
@@ -1643,9 +1665,11 @@ void pawnP2(int y1,int y2,int x1,int x2)
             }
             else
             {
+
                 printf("INVALID MOVE");
                 player2Move();
                 return;
+
             }
         }
 
