@@ -21,7 +21,7 @@ char temparr[8][8]=
     {'-','.','-','.','-','.','-','.'}
 };
 char board[8][8]=
-{
+/*{
     {'R','H','B','Q','K','B','H','R'},
     {'P','P','P','P','P','P','P','P'},
     {'.','-','.','-','.','-','.','-'},
@@ -29,6 +29,16 @@ char board[8][8]=
     {'.','-','.','-','.','-','.','-'},
     {'-','.','-','.','-','.','-','.'},
     {'p','p','p','p','p','p','p','p'},
+    {'r','h','b','q','k','b','h','r'}
+};*/
+{
+    {'R','H','B','Q','K','B','H','R'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
+    {'-','.','-','.','-','.','-','.'},
+    {'.','-','.','-','.','-','.','-'},
     {'r','h','b','q','k','b','h','r'}
 };
 
@@ -455,16 +465,16 @@ void player1Move()
     {
         for(j=0; j<8; j++)
         {
-            temparr[i][j]=board[i][j];
+            temparr[i][j]=board[i][j];  //stores array in a temporary array
         }
     }
     int n1,n2;
     printboard();
     checkBlackMoves();
     stalematewhite();
-    if(blackMoves[ki[0]+2][ki[1]+2]==1)
+    if(blackMoves[ki[0]+2][ki[1]+2]==1)         //if king is in danger
     {
-        checkmateWhite();
+        checkmateWhite();                       //checks if game is over or not
         if(gameOver==false)
             printf("\n\nWhite Check\n\n");
     }
@@ -481,12 +491,12 @@ void player1Move()
     c2=input[2];
     if((c1=='A'||c1=='B'|c1=='C'|c1=='D'|c1=='E'|c1=='F'|c1=='G'|c1=='H')&&(c2=='A'||c2=='B'|c2=='C'|c2=='D'|c2=='E'|c2=='F'|c2=='G'|c2=='H'))
     {
-    c1=c1-'A';
+    c1=c1-'A';             //deals with upper case letters
     c2=c2-'A';
     }
     else if((c1=='a'||c1=='b'|c1=='c'|c1=='d'|c1=='e'|c1=='f'|c1=='g'|c1=='h')&&(c2=='a'||c2=='b'|c2=='c'|c2=='d'|c2=='e'|c2=='f'|c2=='g'|c2=='h'))
     {
-    c1=c1-'a';
+    c1=c1-'a';            //deals with lower case letters
     c2=c2-'a';
     }
     else{system("cls");
@@ -519,17 +529,16 @@ void player1Move()
     else if(board[x1][y1]=='k')
         king(y1,y2,x1,x2);
 
-    else if(board[x1][y1]=='K'||board[x1][y1]=='Q'||board[x1][y1]=='R'||board[x1][y1]=='B'
-            ||board[x1][y1]=='H'||board[x1][y1]=='P'||board[x1][y1]=='.'||board[x1][y1]=='-')
+    else
     {
-        system("cls");
+        system("cls");                  //if location is not a player piece
         player1Move();
         return;
     }
      if(!(board[x1][y1]=='-'||board[x1][y1]=='.'))
     {
         system("cls");
-        player1Move();
+        player1Move();             //if move was unsuccessful
         return;
     }
     system("cls");
@@ -540,14 +549,14 @@ void player1Move()
         {
             for(j=0; j<8; j++)
             {
-                board[i][j]=temparr[i][j];
+                board[i][j]=temparr[i][j];           //if move results in check then it takes input again and resets array
             }
         }
         printf("\nCan't Make this Move As it results in Check.\n");
         player1Move();
         return;
     }
-    if(!(pieceonx2y2=='-'||pieceonx2y2=='.'))
+    if(!(pieceonx2y2=='-'||pieceonx2y2=='.'))  //if move was successful and an enemy piece was removed
     deadPieces[deadindex++]=pieceonx2y2;
 }
 
@@ -687,17 +696,17 @@ void player2Move()
     {
         for(j=0; j<8; j++)
         {
-            temparr[i][j]=board[i][j];
+            temparr[i][j]=board[i][j];   //stores array in a temporary array
         }
     }
     char c1,c2;
     printboard();
     checkWhiteMoves();
     stalemateblack();
-    if(whiteMoves[ki[2]+2][ki[3]+2]==1)
+    if(whiteMoves[ki[2]+2][ki[3]+2]==1)   //if king is in danger
     {
         checkmateblack();
-        if(gameOver==false)
+        if(gameOver==false)                //checks if game is over or not
             printf("\n\nBlack Check\n\n");
     }
     if(gameOver==true)
@@ -712,12 +721,12 @@ void player2Move()
     c2=input[2];
     if((c1=='A'||c1=='B'|c1=='C'|c1=='D'|c1=='E'|c1=='F'|c1=='G'|c1=='H')&&(c2=='A'||c2=='B'|c2=='C'|c2=='D'|c2=='E'|c2=='F'|c2=='G'|c2=='H'))
     {
-    c1=c1-'A';
+    c1=c1-'A';   //deals with upper case letters
     c2=c2-'A';
     }
     else if((c1=='a'||c1=='b'|c1=='c'|c1=='d'|c1=='e'|c1=='f'|c1=='g'|c1=='h')&&(c2=='a'||c2=='b'|c2=='c'|c2=='d'|c2=='e'|c2=='f'|c2=='g'|c2=='h'))
     {
-    c1=c1-'a';
+    c1=c1-'a';            //deals with lower case letters
     c2=c2-'a';
     }
     else{
@@ -748,7 +757,7 @@ void player2Move()
     horse2(y1,y2,x1,x2);
     else if(board[x1][y1]=='K')
         king(y1,y2,x1,x2);
-    else
+    else           //if location is not a player piece
     {
         system("cls");
         player2Move();
@@ -756,7 +765,7 @@ void player2Move()
     }
     if(!(board[x1][y1]=='-'||board[x1][y1]=='.'))
     {   system("cls");
-        player2Move();
+        player2Move();                      //if move was unsuccessful
         return;
     }
 
@@ -769,7 +778,7 @@ void player2Move()
         {
             for(j=0; j<8; j++)
             {
-                board[i][j]=temparr[i][j];
+                board[i][j]=temparr[i][j];               //if move results in check then it takes input again and resets array
             }
         }
 
@@ -777,7 +786,7 @@ void player2Move()
         return;
     }
     if(!(pieceonx2y2=='-'||pieceonx2y2=='.'))
-    deadPieces[deadindex++]=pieceonx2y2;
+    deadPieces[deadindex++]=pieceonx2y2;          //if move was successful and an enemy piece was removed
 }
 
 
