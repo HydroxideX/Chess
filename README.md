@@ -1326,9 +1326,9 @@ void checkBlackMoves()
             return;
         }
     }
-    if(blackMoves[ki[0]+1+2][ki[1]+2-2]==3||blackMoves[ki[0]+1+2][ki[1]+1+2]==3||blackMoves[ki[0]-1+2][ki[1]+2+2]==3
-            ||blackMoves[ki[0]-1+2][ki[1]+2-2]==3||blackMoves[ki[0]+2+2][ki[1]+2+1]==3
-            ||blackMoves[ki[0]+2+2][ki[1]+2-1]==3||blackMoves[ki[0]+2-2][ki[1]+2-1]==3||blackMoves[ki[0]+2-2][ki[1]+2+1]==3)
+    if(blackMoves[ki[0]+1+2][ki[1]-2+2]==3||blackMoves[ki[0]+1+2][ki[1]+2+2]==3||blackMoves[ki[0]-1+2][ki[1]+2+2]==3
+            ||blackMoves[ki[0]-1+2][ki[1]-2+2]==3||blackMoves[ki[0]+2+2][ki[1]+1+2]==3
+            ||blackMoves[ki[0]+2+2][ki[1]-1+2]==3||blackMoves[ki[0]-2+2][ki[1]-1+2]==3||blackMoves[ki[0]-2+2][ki[1]+1+2]==3)
     {
         blackMoves[ki[0]+2][ki[1]+2]=1;             //checks if there is a horse endangering king
         return;
@@ -1465,7 +1465,7 @@ void checkWhiteMoves()
             return;
         }
     }
-    if(whiteMoves[ki[2]+1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+1+2][ki[3]+1+2]==3||whiteMoves[ki[2]-1+2][ki[3]+2+2]==3
+    if(whiteMoves[ki[2]+1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+1+2][ki[3]+2+2]==3||whiteMoves[ki[2]-1+2][ki[3]+2+2]==3
             ||whiteMoves[ki[2]-1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+2+2][ki[3]+2+1]==3
             ||whiteMoves[ki[2]+2+2][ki[3]+2-1]==3||whiteMoves[ki[2]+2-2][ki[3]+2-1]==3||whiteMoves[ki[2]+2-2][ki[3]+2+1]==3)
     {
@@ -1919,6 +1919,7 @@ void straight(int y1,int y2,int x1,int x2)
                 }
             }
         }
+
         else if (y1==y2)
         {
             if(x2>x1)
