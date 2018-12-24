@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 int ki[4] = {7,4,0,4};
-
+int tempki[4]={7,4,0,4};
 //GENERAL
 bool stalemate = false,
-        gameOver=false,
-        player1Win=false,
-        player2Win=false;
+     gameOver=false,
+     player1Win=false,
+     player2Win=false;
 
 // PAWN
 int Te1;
@@ -19,11 +19,11 @@ char arr[100];
 int indexo=0;
 
 bool upgradeRedo=false,
-        EnPassent1=false,
-        EnPassent2=false,
-        checkupgrade=false,
-        EnPassent2UR=false,
-        EnPassent1UR=false;
+     EnPassent1=false,
+     EnPassent2=false,
+     checkupgrade=false,
+     EnPassent2UR=false,
+     EnPassent1UR=false;
 // *******************************************
 
 //UNDO AND REDO
@@ -84,28 +84,28 @@ char boardlayout[8][8]=
 void save()
 {
 
-        int i,j;
+    int i,j;
 
-        FILE * fPointer;
-        fPointer = fopen("Save.text","w");
-        for (i=0;i<8;i++)
+    FILE * fPointer;
+    fPointer = fopen("Save.text","w");
+    for (i=0; i<8; i++)
+    {
+        for(j=0; j<8; j++)
         {
-            for(j=0;j<8;j++)
-            {
 
-                fprintf(fPointer," %c",board[i][j]);
-            }
-
+            fprintf(fPointer," %c",board[i][j]);
         }
-        fclose(fPointer);
 
-        FILE * fP;
-        fP = fopen("SaveDead.text","w");
-        for (i=0;i<48;i++)
-        {
-            fprintf(fP," %c",deadPieces[i]);
-        }
-        fclose(fP);
+    }
+    fclose(fPointer);
+
+    FILE * fP;
+    fP = fopen("SaveDead.text","w");
+    for (i=0; i<48; i++)
+    {
+        fprintf(fP," %c",deadPieces[i]);
+    }
+    fclose(fP);
 
 
 }
@@ -113,28 +113,28 @@ void save()
 void load()
 {
 
-        int i,j;
-            FILE * fPointer;
+    int i,j;
+    FILE * fPointer;
 
-            fPointer = fopen("Save.text","r");
-            for (i=0;i<8;i++)
-            {
-                for(j=0;j<8;j++)
-                {
-
-                    fscanf(fPointer," %c",&board[i][j]);
-                }
-
-            }
-            fclose(fPointer);
-
-                FILE * fP;
-        fP = fopen("SaveDead.text","r");
-        for (i=0;i<48;i++)
+    fPointer = fopen("Save.text","r");
+    for (i=0; i<8; i++)
+    {
+        for(j=0; j<8; j++)
         {
-            fscanf(fP," %c",&deadPieces[i]);
+
+            fscanf(fPointer," %c",&board[i][j]);
         }
-        fclose(fP);
+
+    }
+    fclose(fPointer);
+
+    FILE * fP;
+    fP = fopen("SaveDead.text","r");
+    for (i=0; i<48; i++)
+    {
+        fscanf(fP," %c",&deadPieces[i]);
+    }
+    fclose(fP);
 
 
 
@@ -198,7 +198,8 @@ void stalemateblack()
     gameOver=true;
     stalemate=true;
     for(r1=0; r1<8; r1++)
-    {                                //goes on every row and column in board if a black piece is found it tries to move it
+    {
+        //goes on every row and column in board if a black piece is found it tries to move it
         for(c1=0; c1<8; c1++)
         {
             if(board[r1][c1]=='K'||board[r1][c1]=='Q'||board[r1][c1]=='R'||board[r1][c1]=='B'||board[r1][c1]=='H'||board[r1][c1]=='P')
@@ -206,7 +207,9 @@ void stalemateblack()
                 for(r2=0; r2<8; r2++)
                 {
                     for(c2=0; c2<8; c2++)
-                    {   if(r2==r1&&c2==c1)continue;       //this condition continues if location is same as destination
+                    {
+                        if(r2==r1&&c2==c1)
+                            continue;       //this condition continues if location is same as destination
 
                         if((board[r1][c1]=='R'||board[r1][c1]=='Q')&&(r2==r1||c1==c2))
                             rook2(c1,c2,r1,r2);
@@ -217,8 +220,15 @@ void stalemateblack()
                         else if(board[r1][c1]=='P')
                             pawnP2(c1,c2,r1,r2);
                         else if(board[r1][c1]=='K')
-                        {
+                        {   for(i=0;i<4;i++)
+                            {
+                              tempki[i]=ki[i];
+                            }
                             king(c1,c2,r1,r2);
+                            for(i=0;i<4;i++)
+                            {
+                              ki[i]=tempki[i];
+                            }
                             checkWhiteMoves();           //if king could move then it moves it and checks if that place if in danger if so it returns it to original place
                             if(whiteMoves[r2+2][c2+2]==1)
                             {
@@ -226,7 +236,8 @@ void stalemateblack()
                             }
                         }
                         if(board[r1][c1]==boardlayout[r1][c1]&&(board[r2][c2]=='R'||board[r2][c2]=='K'||board[r2][c2]=='B'||board[r2][c2]=='H'||board[r2][c2]=='Q'||board[r2][c2]=='P'))
-                        {                    //checks if a piece has moves to [r2][c2] if so then its not stalemate
+                        {
+                            //checks if a piece has moves to [r2][c2] if so then its not stalemate
 
                             for(i=0; i<8; i++)
                             {
@@ -255,7 +266,8 @@ void stalematewhite()
     gameOver=true;
     stalemate=true;
     for(r1=0; r1<8; r1++)
-    {                                        //goes on every row and column in board if a black piece is found it tries to move it
+    {
+        //goes on every row and column in board if a black piece is found it tries to move it
         for(c1=0; c1<8; c1++)
         {
             if(board[r1][c1]=='k'||board[r1][c1]=='q'||board[r1][c1]=='r'||board[r1][c1]=='b'||board[r1][c1]=='h'||board[r1][c1]=='p')
@@ -263,7 +275,9 @@ void stalematewhite()
                 for(r2=0; r2<8; r2++)
                 {
                     for(c2=0; c2<8; c2++)
-                    {   if(r2==r1&&c2==c1)continue;       //this condition continues if location is same as destination
+                    {
+                        if(r2==r1&&c2==c1)
+                            continue;       //this condition continues if location is same as destination
 
                         if((board[r1][c1]=='r'||board[r1][c1]=='q')&&(r2==r1||c1==c2))
                             rook1(c1,c2,r1,r2);
@@ -274,8 +288,15 @@ void stalematewhite()
                         else if(board[r1][c1]=='p')
                             pawnP1(c1,c2,r1,r2);
                         else if(board[r1][c1]=='k')
-                        {
+                        {   for(i=0;i<4;i++)
+                            {
+                              tempki[i]=ki[i];
+                            }
                             king(c1,c2,r1,r2);
+                            for(i=0;i<4;i++)
+                            {
+                              ki[i]=tempki[i];
+                            }
                             checkBlackMoves();  //if king could move then it moves it and checks if that place if in danger if so it returns it to original place
                             if(blackMoves[r2+2][c2+2]==1)
                             {
@@ -283,7 +304,8 @@ void stalematewhite()
                             }
                         }
                         if((board[r1][c1]==boardlayout[r1][c1])&&(board[r2][c2]=='r'||board[r2][c2]=='k'||board[r2][c2]=='b'||board[r2][c2]=='h'||board[r2][c2]=='q'||board[r2][c2]=='p'))
-                        {   //checks if a piece has moves to [r2][c2] if so then its not stalemate
+                        {
+                            //checks if a piece has moves to [r2][c2] if so then its not stalemate
 
                             for(i=0; i<8; i++)
                             {
@@ -319,6 +341,10 @@ void checkmateblack()
     }
     if(whiteMoves[ki[2]+2][ki[3]+2]==1)
     {
+        for(i=0;i<4;i++)
+    {
+      tempki[i]=ki[i];
+    }
         gameOver=true;
         player1Win=true;
         for(r1=0; r1<8; r1++)
@@ -330,7 +356,9 @@ void checkmateblack()
                     for(r2=0; r2<8; r2++)
                     {
                         for(c2=0; c2<8; c2++)
-                        {   if(r2==r1&&c2==c1)continue;  //continue if location is the same as destination
+                        {
+                            if(r2==r1&&c2==c1)
+                                continue;  //continue if location is the same as destination
                             for(i=0; i<8; i++)
                             {
                                 for(j=0; j<8; j++)
@@ -347,7 +375,11 @@ void checkmateblack()
                             else if(board[r1][c1]=='P')
                                 pawnP2(c1,c2,r1,r2);
                             else if(board[r1][c1]=='K')
-                                king(c1,c2,r1,r2);
+                                {king(c1,c2,r1,r2);
+                                for(i=0;i<4;i++)
+                            {
+                              ki[i]=tempki[i];
+                            }}
                             checkWhiteMoves();                                //checks danger on king after every move
                             if(whiteMoves[ki[2]+2][ki[3]+2]!=1)  //if a move succeeded to remove danger then its not checkmate
                             {
@@ -360,7 +392,7 @@ void checkmateblack()
                                         board[i][j]=temparr[i][j];  //this resets the array to what it was before last movement every time if a movement could occur
                                     }
                                 }
-                            return;
+                                return;
                             }
                         }
                     }
@@ -387,6 +419,10 @@ void checkmateWhite()
     }
     if(blackMoves[ki[0]+2][ki[1]+2]==1)
     {
+        for(i=0;i<4;i++)
+        {
+          tempki[i]=ki[i];
+        }
         gameOver=true;
         player2Win=true;
         for(r1=0; r1<8; r1++)
@@ -398,7 +434,9 @@ void checkmateWhite()
                     for(r2=0; r2<8; r2++)
                     {
                         for(c2=0; c2<8; c2++)
-                        {   if(r2==r1&&c2==c1)continue;  //continue if location is the same as destination
+                        {
+                            if(r2==r1&&c2==c1)
+                                continue;  //continue if location is the same as destination
                             for(i=0; i<8; i++)
                             {
                                 for(j=0; j<8; j++)
@@ -416,6 +454,10 @@ void checkmateWhite()
                                 pawnP1(c1,c2,r1,r2);
                             else if(board[r1][c1]=='k')
                                 king(c1,c2,r1,r2);
+                                for(i=0;i<4;i++)
+                                {
+                                  ki[i]=tempki[i];
+                                }
                             checkBlackMoves();      //checks danger on king after every move
                             if(blackMoves[ki[0]+2][ki[1]+2]!=1)  //if a move succeeded to remove danger then its not checkmate
                             {
@@ -465,71 +507,71 @@ void pawnP2(int y1,int y2,int x1,int x2)
         {
             if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.'  && x2==x1+1)
             {
-                    if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
-                    {
+                if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
+                {
                     board[x2][y2] = 'P';
                     board[x1][y1] = boardlayout[x1][y1];
 
-                    }
-                    else
-                        return ;
+                }
+                else
+                    return ;
 
             }
-           else if(y1 == y2 && x2 <=3 && x2>x1 && (board[x2][y2] == '-' ||board[x2][y2] == '.' ) && (board[x1+1][y1] =='.' || board[x1+1][y1]=='-') )
+            else if(y1 == y2 && x2 <=3 && x2>x1 && (board[x2][y2] == '-' ||board[x2][y2] == '.' ) && (board[x1+1][y1] =='.' || board[x1+1][y1]=='-') )
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
 
             }
             else
-                 return ;
+                return ;
         }
 
         if(x1>1)
         {
-                    if(  (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true && x2==PassentP1X+1 && y2==PassentP1Y )
-                    {
-                        board[x2][y2] = 'P';
-                        if(board[x1][y1+1] == 'p')
-                            {
-                                board[x1][y1] = boardlayout[x1][y1];
-                                board[x1][y2] = boardlayout[x1][y1+1];
-                            }
-                            else if(board[x1][y1-1] == 'p')
-                            {
-                                board[x1][y1] = boardlayout[x1][y1];
-                                board[x1][y2] = boardlayout[x1][y1-1];
-                            }
-                        deadPieces[deadindex++]='p';
-                        EnPassent1UR = true;
-                      //  checkPawn2Upgrade(x2,y2);
-                    }
+            if(  (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true && x2==PassentP1X+1 && y2==PassentP1Y )
+            {
+                board[x2][y2] = 'P';
+                if(board[x1][y1+1] == 'p')
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1+1];
+                }
+                else if(board[x1][y1-1] == 'p')
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1-1];
+                }
+                deadPieces[deadindex++]='p';
+                EnPassent1UR = true;
+                //  checkPawn2Upgrade(x2,y2);
+            }
             else  if(y1!=y2 && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
             {
-                    if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
-                    {
+                if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
+                {
                     board[x2][y2] = 'P';
                     board[x1][y1] = boardlayout[x1][y1];
-                   // checkPawn2Upgrade(x2,y2);
-                    }
-                    else
-                        return ;
+                    // checkPawn2Upgrade(x2,y2);
+                }
+                else
+                    return ;
 
             }
-           else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '-')
+            else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '-')
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
                 //checkPawn2Upgrade(x2,y2);
             }
-           else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '.')
+            else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '.')
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
-              //  checkPawn2Upgrade(x2,y2);
+                //  checkPawn2Upgrade(x2,y2);
             }
             else
-                 return ;
+                return ;
         }
 
 
@@ -541,50 +583,50 @@ void checkPawn2Upgrade(int x2,int y2)
 {
     char upgrade2;
 
-        if(x2==7)
+    if(x2==7)
+    {
+        printf("\n");
+        printf("Upgrade Your Pawn : ");
+        scanf(" %c", &upgrade2);
+        UndoRedoUpgrade[undoindex][0]='P';
+        if(upgrade2=='H')
         {
-                printf("\n");
-                printf("Upgrade Your Pawn : ");
-                scanf(" %c", &upgrade2);
-                UndoRedoUpgrade[undoindex][0]='P';
-            if(upgrade2=='H')
-            {
 
-                board[x2][y2] = 'H';
-                UndoRedoUpgrade[undoindex][1]=upgrade2;
-                checkupgrade=true;
-            }
-            else if(upgrade2=='B')
-            {
-                board[x2][y2] = 'B';
-                UndoRedoUpgrade[undoindex][1]=upgrade2;
-                checkupgrade=true;
-            }
-            else if(upgrade2=='R')
-            {
-                board[x2][y2] = 'R';
-                UndoRedoUpgrade[undoindex][1]=upgrade2;
-                checkupgrade=true;
-            }
-            else if(upgrade2=='Q')
-            {
-                board[x2][y2] = 'Q';
-                UndoRedoUpgrade[undoindex][1]=upgrade2;
-                checkupgrade=true;
-            }
-            else if(upgrade2=='H')
-            {
-                board[x2][y2] = 'H';
-                UndoRedoUpgrade[undoindex][1]=upgrade2;
-                checkupgrade=true;
-            }
-            else
-            {
-                printf("Enter Valid Character !!!");
-                checkPawn2Upgrade(x2,y2);
-                return ;
-            }
+            board[x2][y2] = 'H';
+            UndoRedoUpgrade[undoindex][1]=upgrade2;
+            checkupgrade=true;
         }
+        else if(upgrade2=='B')
+        {
+            board[x2][y2] = 'B';
+            UndoRedoUpgrade[undoindex][1]=upgrade2;
+            checkupgrade=true;
+        }
+        else if(upgrade2=='R')
+        {
+            board[x2][y2] = 'R';
+            UndoRedoUpgrade[undoindex][1]=upgrade2;
+            checkupgrade=true;
+        }
+        else if(upgrade2=='Q')
+        {
+            board[x2][y2] = 'Q';
+            UndoRedoUpgrade[undoindex][1]=upgrade2;
+            checkupgrade=true;
+        }
+        else if(upgrade2=='H')
+        {
+            board[x2][y2] = 'H';
+            UndoRedoUpgrade[undoindex][1]=upgrade2;
+            checkupgrade=true;
+        }
+        else
+        {
+            printf("Enter Valid Character !!!");
+            checkPawn2Upgrade(x2,y2);
+            return ;
+        }
+    }
 
 }
 
@@ -610,8 +652,8 @@ void pawnP1(int y1,int y2,int x1,int x2)
             {
                 if(board[x2][y2] != 'p' &&board[x2][y2] != 'r'&&board[x2][y2] != 'h'&&board[x2][y2] != 'b'&&board[x2][y2] != 'q' )
                 {
-                board[x2][y2] = 'p';
-                board[x1][y1] = boardlayout[x1][y1];
+                    board[x2][y2] = 'p';
+                    board[x1][y1] = boardlayout[x1][y1];
 
                 }
                 else
@@ -630,239 +672,239 @@ void pawnP1(int y1,int y2,int x1,int x2)
         }
 
         else if(x1<6)
+        {
+            if( y1!=y2 && (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
             {
-                    if( y1!=y2 && (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
-                    {
-                        board[x2][y2] = 'p';
-                        if(board[x1][y1+1] == 'P')
-                        {
-                            board[x1][y1] = boardlayout[x1][y1];
-                            board[x1][y2] = boardlayout[x1][y1+1];
-                        }
-                        else if(board[x1][y1-1] == 'P'  )
-                        {
-                            board[x1][y1] = boardlayout[x1][y1];
-                            board[x1][y2] = boardlayout[x1][y1-1];
-                        }
-                   deadPieces[deadindex++]='P';
-
-                        EnPassent2UR=true;
-                        checkPawn1Upgrade();
-                    }
-                else  if(y1!=y2 && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
+                board[x2][y2] = 'p';
+                if(board[x1][y1+1] == 'P')
                 {
-                    if(board[x2][y2] != 'p' &&board[x2][y2] != 'r'&&board[x2][y2] != 'h'&&board[x2][y2] != 'b'&&board[x2][y2] != 'q' )
-                    {
-                    board[x2][y2] = 'p';
                     board[x1][y1] = boardlayout[x1][y1];
-
-              //      checkPawn1Upgrade(x2,y2);
-                    }
-                    else
-                        return ;
+                    board[x1][y2] = boardlayout[x1][y1+1];
                 }
-                else if(y1 == y2 && x1==x2+1 && board[x2][y2] == '-')
+                else if(board[x1][y1-1] == 'P'  )
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1-1];
+                }
+                deadPieces[deadindex++]='P';
+
+                EnPassent2UR=true;
+                checkPawn1Upgrade();
+            }
+            else  if(y1!=y2 && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
+            {
+                if(board[x2][y2] != 'p' &&board[x2][y2] != 'r'&&board[x2][y2] != 'h'&&board[x2][y2] != 'b'&&board[x2][y2] != 'q' )
                 {
                     board[x2][y2] = 'p';
                     board[x1][y1] = boardlayout[x1][y1];
 
-               //     checkPawn1Upgrade(x2,y2);
-                }
-                else if(y1 == y2 && x1==x2+1 && board[x2][y2] == '.')
-                {
-                    board[x2][y2] = 'p';
-                    board[x1][y1] = boardlayout[x1][y1];
-                //    checkPawn1Upgrade(x2,y2);
+                    //      checkPawn1Upgrade(x2,y2);
                 }
                 else
                     return ;
             }
+            else if(y1 == y2 && x1==x2+1 && board[x2][y2] == '-')
+            {
+                board[x2][y2] = 'p';
+                board[x1][y1] = boardlayout[x1][y1];
+
+                //     checkPawn1Upgrade(x2,y2);
+            }
+            else if(y1 == y2 && x1==x2+1 && board[x2][y2] == '.')
+            {
+                board[x2][y2] = 'p';
+                board[x1][y1] = boardlayout[x1][y1];
+                //    checkPawn1Upgrade(x2,y2);
+            }
+            else
+                return ;
+        }
 
     }
-        else
-            return;
+    else
+        return;
 }
 void checkPawn1Upgrade(int x2,int y2)
 {
 
     char upgrade1;
-        if(x2==0)
+    if(x2==0)
+    {
+        printf("\n");
+        printf("Upgrade Your Pawn : ");
+        scanf(" %c", &upgrade1);
+        UndoRedoUpgrade[undoindex][0]='p';
+        if(upgrade1=='h')
         {
-                printf("\n");
-                printf("Upgrade Your Pawn : ");
-                scanf(" %c", &upgrade1);
-                UndoRedoUpgrade[undoindex][0]='p';
-            if(upgrade1=='h')
-            {
-                board[x2][y2] = 'h';
-                UndoRedoUpgrade[undoindex][1]=upgrade1;
-                checkupgrade=true;
-                return ;
-            }
-            else if(upgrade1=='b')
-            {
-                board[x2][y2] = 'b';
-                UndoRedoUpgrade[undoindex][1]=upgrade1;
-                checkupgrade=true;
-                return ;
-            }
-            else if(upgrade1=='r')
-            {
-                board[x2][y2] = 'r';
-                UndoRedoUpgrade[undoindex][1]=upgrade1;
-                checkupgrade=true;
-                return ;
-            }
-            else if(upgrade1=='q')
-            {
-                board[x2][y2] = 'q';
-                UndoRedoUpgrade[undoindex][1]=upgrade1;
-                checkupgrade=true;
-                return ;
-            }
-            else if(upgrade1=='h')
-            {
-                board[x2][y2] = 'h';
-                UndoRedoUpgrade[undoindex][1]=upgrade1;
-                checkupgrade=true;
-                return ;
-            }
-            else
-            {
-                printf("Enter Valid Character !!!");
-                checkPawn1Upgrade(x2,y2);
-                return ;
-            }
+            board[x2][y2] = 'h';
+            UndoRedoUpgrade[undoindex][1]=upgrade1;
+            checkupgrade=true;
+            return ;
         }
+        else if(upgrade1=='b')
+        {
+            board[x2][y2] = 'b';
+            UndoRedoUpgrade[undoindex][1]=upgrade1;
+            checkupgrade=true;
+            return ;
+        }
+        else if(upgrade1=='r')
+        {
+            board[x2][y2] = 'r';
+            UndoRedoUpgrade[undoindex][1]=upgrade1;
+            checkupgrade=true;
+            return ;
+        }
+        else if(upgrade1=='q')
+        {
+            board[x2][y2] = 'q';
+            UndoRedoUpgrade[undoindex][1]=upgrade1;
+            checkupgrade=true;
+            return ;
+        }
+        else if(upgrade1=='h')
+        {
+            board[x2][y2] = 'h';
+            UndoRedoUpgrade[undoindex][1]=upgrade1;
+            checkupgrade=true;
+            return ;
+        }
+        else
+        {
+            printf("Enter Valid Character !!!");
+            checkPawn1Upgrade(x2,y2);
+            return ;
+        }
+    }
 
 }
 // UNDO FUNCTION
 void undoFunc()
 {
 
-            undoindex--;
-            // For Undo Pawn Passent
+    undoindex--;
+    // For Undo Pawn Passent
 
-        if( EnPassent2UR == true && checkChar[undoindex][0] =='p' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.'))
-            {
-                    board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
-                    board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]][undo[undoindex][3]];
-                    board[PassentP2X][PassentP2Y] = 'P';
-                    deadPieces[deadindex-1]=' ';
-                    deadindex--;
-                    EnPassent2UR = false;
-            }
-            else if( EnPassent1UR == true && checkChar[undoindex][0] =='P' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.') )
-            {
-                    board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
-                    board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]][undo[undoindex][3]];
-                    board[PassentP1X][PassentP1Y] = 'p';
-                    deadPieces[deadindex-1]=' ';
-                    deadindex--;
-                    EnPassent1UR = false;
-            }
-            // For Undo To Pawn Upgrade Without Kill
-           else if( (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.')&& (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
-            {
-                upgradeRedo=true;
-                board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = UndoRedoUpgrade[undoindex][0];
-                board[undo[undoindex][2]][undo[undoindex][3]] = checkChar[undoindex][1];
-                checkupgrade = false;
+    if( EnPassent2UR == true && checkChar[undoindex][0] =='p' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.'))
+    {
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
+        board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]][undo[undoindex][3]];
+        board[PassentP2X][PassentP2Y] = 'P';
+        deadPieces[deadindex-1]=' ';
+        deadindex--;
+        EnPassent2UR = false;
+    }
+    else if( EnPassent1UR == true && checkChar[undoindex][0] =='P' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.') )
+    {
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
+        board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]][undo[undoindex][3]];
+        board[PassentP1X][PassentP1Y] = 'p';
+        deadPieces[deadindex-1]=' ';
+        deadindex--;
+        EnPassent1UR = false;
+    }
+    // For Undo To Pawn Upgrade Without Kill
+    else if( (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.')&& (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
+    {
+        upgradeRedo=true;
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = UndoRedoUpgrade[undoindex][0];
+        board[undo[undoindex][2]][undo[undoindex][3]] = checkChar[undoindex][1];
+        checkupgrade = false;
 
-            }
+    }
 
-            // For Undo To Pawn Upgrade With Kill
-           // else if()
-           else if(  (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
-            {
-                upgradeRedo=true;
-                board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = UndoRedoUpgrade[undoindex][0];
-                board[undo[undoindex][2]][undo[undoindex][3]] = checkChar[undoindex][1];
-                checkupgrade = false;
-                deadPieces[deadindex-1]=' ';
-                deadindex--;
-            }
+    // For Undo To Pawn Upgrade With Kill
+    // else if()
+    else if(  (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
+    {
+        upgradeRedo=true;
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = UndoRedoUpgrade[undoindex][0];
+        board[undo[undoindex][2]][undo[undoindex][3]] = checkChar[undoindex][1];
+        checkupgrade = false;
+        deadPieces[deadindex-1]=' ';
+        deadindex--;
+    }
 
-            // *******************************
+    // *******************************
 
-            // For Normal Undo
-            else if( (checkChar[undoindex][1] =='-' || checkChar[undoindex][1] =='.') )
-            {
-                    board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
-                    board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]] [undo[undoindex][3]];
-            }
+    // For Normal Undo
+    else if( (checkChar[undoindex][1] =='-' || checkChar[undoindex][1] =='.') )
+    {
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
+        board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]] [undo[undoindex][3]];
+    }
 
-            // ******************************
+    // ******************************
 
-            // For Undo With Dead Pieces
-            else if( deadPieces[deadindex-1]!=' ' || deadPieces[deadindex]!=' ' )
-            {
-                board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
+    // For Undo With Dead Pieces
+    else if( deadPieces[deadindex-1]!=' ' || deadPieces[deadindex]!=' ' )
+    {
+        board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
 
-                board[undo[undoindex][2] ] [undo[undoindex][3]] = deadPieces[deadindex-1];
+        board[undo[undoindex][2] ] [undo[undoindex][3]] = deadPieces[deadindex-1];
 
-                deadPieces[deadindex-1]=' ';
-                deadindex--;
-            }
-            //******************************
-        system("cls");
+        deadPieces[deadindex-1]=' ';
+        deadindex--;
+    }
+    //******************************
+    system("cls");
 
 
 }
 // REDO FUNCTION
 void redo()
 {
-            //For Redo To Pawn Upgrade With kill
-            if((checkChar[undoindex][1] !='-'||checkChar[undoindex][1]!='.') && (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
-            {
-                board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = UndoRedoUpgrade[undoindex][1];
-                board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
-                upgradeRedo = false;
-                deadPieces[deadindex++] =  checkChar[undoindex][1];
+    //For Redo To Pawn Upgrade With kill
+    if((checkChar[undoindex][1] !='-'||checkChar[undoindex][1]!='.') && (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
+    {
+        board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = UndoRedoUpgrade[undoindex][1];
+        board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        upgradeRedo = false;
+        deadPieces[deadindex++] =  checkChar[undoindex][1];
 
-                checkPawn1Upgrade(Te1,Te2);
-                checkPawn2Upgrade(Te1,Te2);
-                undoindex++;
+        checkPawn1Upgrade(Te1,Te2);
+        checkPawn2Upgrade(Te1,Te2);
+        undoindex++;
 
-            }
-            // For Redo To Pawn Upgrade Without Kill
-            else if((checkChar[undoindex][1] =='-'||checkChar[undoindex][1]=='.') && (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
-            {
-                board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = UndoRedoUpgrade[undoindex][1];
-                board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
-                upgradeRedo = false;
+    }
+    // For Redo To Pawn Upgrade Without Kill
+    else if((checkChar[undoindex][1] =='-'||checkChar[undoindex][1]=='.') && (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
+    {
+        board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = UndoRedoUpgrade[undoindex][1];
+        board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        upgradeRedo = false;
 
-                checkPawn1Upgrade(Te1,Te2);
-                checkPawn2Upgrade(Te1,Te2);
-                undoindex++;
+        checkPawn1Upgrade(Te1,Te2);
+        checkPawn2Upgrade(Te1,Te2);
+        undoindex++;
 
-            }
-            //******************************
-            //For Redo With En Passent
-            // For Normal Redo
-            else if(checkChar[undoindex][1] =='-' || checkChar[undoindex][1] =='.')
-            {
-                board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = board[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
-                board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
-                undoindex++;
-            }
+    }
+    //******************************
+    //For Redo With En Passent
+    // For Normal Redo
+    else if(checkChar[undoindex][1] =='-' || checkChar[undoindex][1] =='.')
+    {
+        board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = board[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        undoindex++;
+    }
 
-            //*******************************
+    //*******************************
 
-            // For Redo With Dead Pieces
-            else
-            {
+    // For Redo With Dead Pieces
+    else
+    {
 
-                deadPieces[deadindex++] =  board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ];
+        deadPieces[deadindex++] =  board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ];
 
-                board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = board[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = board[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
 
-                board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
+        board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
 
-                undoindex++;
-            }
-            //***********************
-        system("cls");
+        undoindex++;
+    }
+    //***********************
+    system("cls");
 
 }
 
@@ -903,6 +945,7 @@ void player1Move()
         {
             undoFunc();
             player2Move();
+            redoIndex=undoindex;
             return ;
         }
 
@@ -915,13 +958,13 @@ void player1Move()
             player2Move();
             return ;
         }
-    /*    else
-        {
-            printf("Invalid Undo");
-            player1Move();
-            return ;
-        }
-        */
+        /*    else
+            {
+                printf("Invalid Undo");
+                player1Move();
+                return ;
+            }
+            */
     }
     else if(c1=='S' || c1 =='s')
     {
@@ -935,21 +978,34 @@ void player1Move()
 
     if((c1=='A'||c1=='B'|c1=='C'|c1=='D'|c1=='E'|c1=='F'|c1=='G'|c1=='H')&&(c2=='A'||c2=='B'|c2=='C'|c2=='D'|c2=='E'|c2=='F'|c2=='G'|c2=='H'))
     {
-    c1=c1-'A';             //deals with upper case letters
-    c2=c2-'A';
+        c1=c1-'A';             //deals with upper case letters
+        c2=c2-'A';
     }
     else if((c1=='a'||c1=='b'|c1=='c'|c1=='d'|c1=='e'|c1=='f'|c1=='g'|c1=='h')&&(c2=='a'||c2=='b'|c2=='c'|c2=='d'|c2=='e'|c2=='f'|c2=='g'|c2=='h'))
     {
-    c1=c1-'a';            //deals with lower case letters
-    c2=c2-'a';
+        c1=c1-'a';            //deals with lower case letters
+        c2=c2-'a';
     }
-    else{system("cls");
-            player1Move();
-    return;}
-    n1=input[1]-'0';
-    n2=input[3]-'0';
-    n1--;
-    n2--;
+    else
+    {
+        system("cls");
+        player1Move();
+        return;
+    }
+    n1=input[1]-'1';
+    n2=input[3]-'1';
+    if(n1<0||n1>7||n2<0||n2>7)
+    {
+        system("cls");
+        player1Move();
+        return;
+    }
+    if(n1==n2&&c1==c2)
+    {
+        system("cls");
+        player1Move();
+        return;
+    }
     int x1=n1;
     int x2=n2;
 // To Solve Conflict Between Character And Integer
@@ -988,27 +1044,14 @@ void player1Move()
         return;
     }
 
-     if(!(board[x1][y1]=='-'||board[x1][y1]=='.'))
+    if(!(board[x1][y1]=='-'||board[x1][y1]=='.'))
     {
         system("cls");
         player1Move();             //if move was unsuccessful
         return;
     }
 
-// UNDO
-    undo[undoindex][0]=x1;
-    undo[undoindex][1]=y1;
-    undo[undoindex][2]=x2;
-    undo[undoindex][3]=y2;
 
-    checkChar[undoindex][0]=InChar;
-    checkChar[undoindex][1]=ToChar;
-
-    redoTemp[undoindex][0]=x2;
-    redoTemp[undoindex][1]=y2;
-    redoTemp[undoindex][2]=x1;
-    redoTemp[undoindex++][3]=y1;
-    redoIndex++;
 
 
     system("cls");
@@ -1027,14 +1070,22 @@ void player1Move()
         return;
     }
     if(!(pieceonx2y2=='-'||pieceonx2y2=='.'))  //if move was successful and an enemy piece was removed
-    deadPieces[deadindex++]=pieceonx2y2;
+        deadPieces[deadindex++]=pieceonx2y2;
+    // UNDO
+    undo[undoindex][0]=x1;
+    undo[undoindex][1]=y1;
+    undo[undoindex][2]=x2;
+    undo[undoindex][3]=y2;
+
+    checkChar[undoindex][0]=InChar;
+    checkChar[undoindex][1]=ToChar;
+
+    redoTemp[undoindex][0]=x2;
+    redoTemp[undoindex][1]=y2;
+    redoTemp[undoindex][2]=x1;
+    redoTemp[undoindex++][3]=y1;
+    redoIndex++;
 }
-
-
-
-
-
-
 void player2Move()
 {
 
@@ -1072,11 +1123,14 @@ void player2Move()
         if(undoindex>0)
         {
             undoFunc();
+
             player1Move();
+            redoIndex=undoindex;
+
             return ;
         }
     }
-   else if(c1=='R' || c1=='r')
+    else if(c1=='R' || c1=='r')
     {
         if(undoindex<redoIndex)
         {
@@ -1096,22 +1150,32 @@ void player2Move()
     }
     else if((c1=='A'||c1=='B'|c1=='C'|c1=='D'|c1=='E'|c1=='F'|c1=='G'|c1=='H')&&(c2=='A'||c2=='B'|c2=='C'|c2=='D'|c2=='E'|c2=='F'|c2=='G'|c2=='H'))
     {
-    c1=c1-'A';   //deals with upper case letters
-    c2=c2-'A';
+        c1=c1-'A';   //deals with upper case letters
+        c2=c2-'A';
     }
     else if((c1=='a'||c1=='b'|c1=='c'|c1=='d'|c1=='e'|c1=='f'|c1=='g'|c1=='h')&&(c2=='a'||c2=='b'|c2=='c'|c2=='d'|c2=='e'|c2=='f'|c2=='g'|c2=='h'))
     {
-    c1=c1-'a';            //deals with lower case letters
-    c2=c2-'a';
+        c1=c1-'a';            //deals with lower case letters
+        c2=c2-'a';
     }
-    else{
-         player2Move();
-}
-    n1=input[1]-'0';
-    n2=input[3]-'0';
-//  Important To Solve Index Problem
-    n1--;
-    n2--;
+    else
+    {
+        player2Move();
+    }
+    n1=input[1]-'1';
+    n2=input[3]-'1';
+    if(n1<0||n1>7||n2<0||n2>7)
+    {
+        system("cls");
+        player2Move();
+        return;
+    }
+    if(n1==n2&&c1==c2)
+    {
+        system("cls");
+        player2Move();
+        return;
+    }
     int x1=n1;
     int x2=n2;
 // To Solve Conflict Between Character And Integer
@@ -1137,7 +1201,7 @@ void player2Move()
         bishop2(y1,y2,x1,x2);
 
     else if(board[x1][y1]=='H')
-    horse2(y1,y2,x1,x2);
+        horse2(y1,y2,x1,x2);
     else if(board[x1][y1]=='K')
         king(y1,y2,x1,x2);
     else           //if location is not a player piece
@@ -1147,25 +1211,14 @@ void player2Move()
         return ;
     }
     if(!(board[x1][y1]=='-'||board[x1][y1]=='.'))
-    {   system("cls");
+    {
+        system("cls");
         player2Move();                      //if move was unsuccessful
         return;
     }
 
 // UNDO
-    undo[undoindex][0]=x1;
-    undo[undoindex][1]=y1;
-    undo[undoindex][2]=x2;
-    undo[undoindex][3]=y2;
 
-    checkChar[undoindex][0]=InChar;
-    checkChar[undoindex][1]=ToChar;
-
-    redoTemp[undoindex][0]=x2;
-    redoTemp[undoindex][1]=y2;
-    redoTemp[undoindex][2]=x1;
-    redoTemp[undoindex++][3]=y1;
-    redoIndex++;
     system("cls");
     checkWhiteMoves();
     while(whiteMoves[ki[2]+2][ki[3]+2]==1)
@@ -1183,7 +1236,20 @@ void player2Move()
         return;
     }
     if(!(pieceonx2y2=='-'||pieceonx2y2=='.'))
-    deadPieces[deadindex++]=pieceonx2y2;          //if move was successful and an enemy piece was removed
+        deadPieces[deadindex++]=pieceonx2y2;          //if move was successful and an enemy piece was removed
+    undo[undoindex][0]=x1;
+    undo[undoindex][1]=y1;
+    undo[undoindex][2]=x2;
+    undo[undoindex][3]=y2;
+
+    checkChar[undoindex][0]=InChar;
+    checkChar[undoindex][1]=ToChar;
+
+    redoTemp[undoindex][0]=x2;
+    redoTemp[undoindex][1]=y2;
+    redoTemp[undoindex][2]=x1;
+    redoTemp[undoindex++][3]=y1;
+    redoIndex++;
 }
 
 
@@ -1294,9 +1360,9 @@ void checkBlackMoves()
             return;
         }
     }
-    if(blackMoves[ki[0]+1+2][ki[1]+2-2]==3||blackMoves[ki[0]+1+2][ki[1]+1+2]==3||blackMoves[ki[0]-1+2][ki[1]+2+2]==3
-            ||blackMoves[ki[0]-1+2][ki[1]+2-2]==3||blackMoves[ki[0]+2+2][ki[1]+2+1]==3
-            ||blackMoves[ki[0]+2+2][ki[1]+2-1]==3||blackMoves[ki[0]+2-2][ki[1]+2-1]==3||blackMoves[ki[0]+2-2][ki[1]+2+1]==3)
+    if(blackMoves[ki[0]+1+2][ki[1]-2+2]==3||blackMoves[ki[0]+1+2][ki[1]+2+2]==3||blackMoves[ki[0]-1+2][ki[1]+2+2]==3
+            ||blackMoves[ki[0]-1+2][ki[1]-2+2]==3||blackMoves[ki[0]+2+2][ki[1]+1+2]==3
+            ||blackMoves[ki[0]+2+2][ki[1]-1+2]==3||blackMoves[ki[0]-2+2][ki[1]-1+2]==3||blackMoves[ki[0]-2+2][ki[1]+1+2]==3)
     {
         blackMoves[ki[0]+2][ki[1]+2]=1;             //checks if there is a horse endangering king
         return;
@@ -1433,7 +1499,7 @@ void checkWhiteMoves()
             return;
         }
     }
-    if(whiteMoves[ki[2]+1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+1+2][ki[3]+1+2]==3||whiteMoves[ki[2]-1+2][ki[3]+2+2]==3
+    if(whiteMoves[ki[2]+1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+1+2][ki[3]+2+2]==3||whiteMoves[ki[2]-1+2][ki[3]+2+2]==3
             ||whiteMoves[ki[2]-1+2][ki[3]+2-2]==3||whiteMoves[ki[2]+2+2][ki[3]+2+1]==3
             ||whiteMoves[ki[2]+2+2][ki[3]+2-1]==3||whiteMoves[ki[2]+2-2][ki[3]+2-1]==3||whiteMoves[ki[2]+2-2][ki[3]+2+1]==3)
     {
@@ -1454,6 +1520,8 @@ void checkWhiteMoves()
         whiteMoves[ki[2]+2][ki[3]+2]=1;
         return;
     }
+
+
     j=ki[3]+1;
     i=ki[2]+1;
     while(i<8&&j<8)
@@ -1609,7 +1677,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i++;
                     j++;
                 }
-                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r'||board[x2][y2]=='h')
                 {
 
                     return ;          //checks if piece of the same color is on destination
@@ -1630,7 +1698,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i++;
                     j++;
                 }
-                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R'||board[x2][y2]=='H')
                 {
 
                     return ;
@@ -1656,7 +1724,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i++;
                     j--;
                 }
-                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r'||board[x2][y2]=='h')
                 {
 
                     return ;              //checks if piece of the same color is on destination
@@ -1677,7 +1745,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i++;
                     j--;
                 }
-                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R'||board[x2][y2]=='H')
                 {
 
                     return ;            //checks if piece of the same color is on destination
@@ -1705,7 +1773,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i--;
                     j++;
                 }
-                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r'||board[x2][y2]=='h')
                 {
                     return ;             //checks if piece of the same color is on destination
                 }
@@ -1724,7 +1792,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i--;
                     j++;
                 }
-                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R'||board[x2][y2]=='H')
                 {
                     return ;             //checks if piece of the same color is on destination
                 }
@@ -1748,7 +1816,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i--;
                     j--;
                 }
-                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r')
+                if(board[x2][y2]=='k'||board[x2][y2]=='q'||board[x2][y2]=='p'||board[x2][y2]=='b'||board[x2][y2]=='r'||board[x2][y2]=='h')
                 {
 
                     return ;          //checks if piece of the same color is on destination
@@ -1769,7 +1837,7 @@ void diagonal(int y1,int y2,int x1,int x2)
                     i--;
                     j--;
                 }
-                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R')
+                if(board[x2][y2]=='K'||board[x2][y2]=='Q'||board[x2][y2]=='P'||board[x2][y2]=='B'||board[x2][y2]=='R'||board[x2][y2]=='H')
                 {
                     return ;              //checks if piece of the same color is on destination
                 }
@@ -1844,6 +1912,10 @@ void straight(int y1,int y2,int x1,int x2)
     int i;
     if(board[x1][y1]=='R'||board[x1][y1]=='Q')
     {
+        if(board[x2][y2]=='R'||board[x2][y2]=='B'||board[x2][y2]=='P'||board[x2][y2]=='K'||board[x2][y2]=='H'||board[x2][y2]=='Q')
+        {
+            return ;                //checks if destination has same color of the piece if so it restarts as cannot capture
+        }
         if(x1==x2)
         {
             if(y2>y1)       //checks if there are pieces between start and end
@@ -1883,6 +1955,7 @@ void straight(int y1,int y2,int x1,int x2)
                 }
             }
         }
+
         else if (y1==y2)
         {
             if(x2>x1)
@@ -1919,14 +1992,15 @@ void straight(int y1,int y2,int x1,int x2)
                     }
                 }
             }
-            if(board[x2][y2]=='R'||board[x2][y2]=='B'||board[x2][y2]=='P'||board[x2][y2]=='K'||board[x2][y2]=='H'||board[x2][y2]=='Q')
-            {
-                return ;                //checks if destination has same color of the piece if so it restarts as cannot capture
-            }
+
         }
     }
     if (board[x1][y1]=='r'||board[x1][y1]=='q')
     {
+        if(board[x2][y2]=='r'||board[x2][y2]=='b'||board[x2][y2]=='p'||board[x2][y2]=='k'||board[x2][y2]=='h'||board[x2][y2]=='q')
+        {
+            return ;                             //checks if destination has same color of the piece if so it restarts as cannot capture
+        }
         if(x1==x2)
         {
             if(y2>y1)
@@ -2005,10 +2079,7 @@ void straight(int y1,int y2,int x1,int x2)
             }
 
         }
-        if(board[x2][y2]=='r'||board[x2][y2]=='b'||board[x2][y2]=='p'||board[x2][y2]=='k'||board[x2][y2]=='h'||board[x2][y2]=='q')
-        {
-            return ;                             //checks if destination has same color of the piece if so it restarts as cannot capture
-        }
+
     }
 
     if(board[x1][y1]=='R')   //checks if piece is rook then replaces with whatever on the other location
