@@ -8,6 +8,7 @@ bool stalemate = false,
      gameOver=false,
      player1Win=false,
      player2Win=false;
+int     WhoWillLoad=0;
 
 // PAWN
 int Te1;
@@ -85,6 +86,11 @@ void save()
 {
 
     int i,j;
+    FILE * fpa;
+    fpa=fopen("l.text","w");
+    fprintf(fpa," %i",WhoWillLoad);
+    fclose(fpa);
+
 
     FILE * fPointer;
     fPointer = fopen("Save.text","w");
@@ -112,8 +118,17 @@ void save()
 
 void load()
 {
-
+    system("cls");
     int i,j;
+    FILE * fpa;
+    fpa=fopen("l.text","r");
+    fscanf(fpa," %i",&WhoWillLoad);
+    fclose(fpa);
+
+
+
+
+
     FILE * fPointer;
 
     fPointer = fopen("Save.text","r");
@@ -136,7 +151,13 @@ void load()
     }
     fclose(fP);
 
-
+    if(WhoWillLoad==true)
+    {
+        player1Move();
+        WhoWillLoad=false;
+    }
+    else
+        player2Move();
 
 
 }
@@ -487,8 +508,6 @@ void pawnP2(int y1,int y2,int x1,int x2)
 
     if(board[x1][y1] == 'P')
     {
-
-
         Te1=x2;
         Te2=y2;
         Te3=x1;
@@ -968,7 +987,9 @@ void player1Move()
     }
     else if(c1=='S' || c1 =='s')
     {
+        WhoWillLoad=1;
         save();
+
     }
     else if(c1=='L'||c1=='l')
     {
@@ -2112,10 +2133,11 @@ int main()
     // Functions Call
     while(gameOver==false)
     {
+
         player1Move();
         if(gameOver==true)
             break;
-        player2Move();
+      player2Move();
     }
     if (player1Win==true)
     {
