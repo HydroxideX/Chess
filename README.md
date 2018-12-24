@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 int ki[4] = {7,4,0,4};
-int tempki[4]={7,4,0,4};
+int tempki[4]= {7,4,0,4};
 //GENERAL
 bool stalemate = false,
      gameOver=false,
@@ -195,6 +195,10 @@ void printboard()
 void stalemateblack()
 {
     int i,j,c1,r1,r2,c2;
+    for(i=0; i<4; i++)
+    {
+        tempki[i]=ki[i];
+    }
     gameOver=true;
     stalemate=true;
     for(r1=0; r1<8; r1++)
@@ -220,19 +224,27 @@ void stalemateblack()
                         else if(board[r1][c1]=='P')
                             pawnP2(c1,c2,r1,r2);
                         else if(board[r1][c1]=='K')
-                        {   for(i=0;i<4;i++)
-                            {
-                              tempki[i]=ki[i];
-                            }
+                        {
                             king(c1,c2,r1,r2);
-                            for(i=0;i<4;i++)
-                            {
-                              ki[i]=tempki[i];
-                            }
                             checkWhiteMoves();           //if king could move then it moves it and checks if that place if in danger if so it returns it to original place
                             if(whiteMoves[r2+2][c2+2]==1)
                             {
                                 king(c2,c1,r2,r1);
+                            }
+                            for(i=0; i<4; i++)
+                            {
+                                ki[i]=tempki[i];
+                            }
+                        }
+                        checkWhiteMoves();
+                        if(whiteMoves[ki[2]+2][ki[3]+2]==1)
+                        {
+                            for(i=0; i<8; i++)
+                            {
+                                for(j=0; j<8; j++)
+                                {
+                                    board[i][j]=temparr[i][j];  //this resets the array to what it was before movement if a movement could occur
+                                }
                             }
                         }
                         if(board[r1][c1]==boardlayout[r1][c1]&&(board[r2][c2]=='R'||board[r2][c2]=='K'||board[r2][c2]=='B'||board[r2][c2]=='H'||board[r2][c2]=='Q'||board[r2][c2]=='P'))
@@ -262,7 +274,12 @@ void stalemateblack()
 *********************************************************************************************************************************/
 void stalematewhite()
 {
+
     int i,j,c1,r1,r2,c2;
+    for(i=0; i<4; i++)
+    {
+        tempki[i]=ki[i];
+    }
     gameOver=true;
     stalemate=true;
     for(r1=0; r1<8; r1++)
@@ -288,21 +305,31 @@ void stalematewhite()
                         else if(board[r1][c1]=='p')
                             pawnP1(c1,c2,r1,r2);
                         else if(board[r1][c1]=='k')
-                        {   for(i=0;i<4;i++)
-                            {
-                              tempki[i]=ki[i];
-                            }
+                        {
                             king(c1,c2,r1,r2);
-                            for(i=0;i<4;i++)
-                            {
-                              ki[i]=tempki[i];
-                            }
+
                             checkBlackMoves();  //if king could move then it moves it and checks if that place if in danger if so it returns it to original place
                             if(blackMoves[r2+2][c2+2]==1)
                             {
                                 king(c2,c1,r2,r1);
                             }
+                            for(i=0; i<4; i++)
+                            {
+                                ki[i]=tempki[i];
+                            }
                         }
+                        checkBlackMoves();
+                        if(blackMoves[ki[0]+2][ki[1]+2]==1)
+                        {
+                            for(i=0; i<8; i++)
+                            {
+                                for(j=0; j<8; j++)
+                                {
+                                    board[i][j]=temparr[i][j];  //this resets the array to what it was before movement if a movement could occur
+                                }
+                            }
+                        }
+
                         if((board[r1][c1]==boardlayout[r1][c1])&&(board[r2][c2]=='r'||board[r2][c2]=='k'||board[r2][c2]=='b'||board[r2][c2]=='h'||board[r2][c2]=='q'||board[r2][c2]=='p'))
                         {
                             //checks if a piece has moves to [r2][c2] if so then its not stalemate
@@ -341,10 +368,10 @@ void checkmateblack()
     }
     if(whiteMoves[ki[2]+2][ki[3]+2]==1)
     {
-        for(i=0;i<4;i++)
-    {
-      tempki[i]=ki[i];
-    }
+        for(i=0; i<4; i++)
+        {
+            tempki[i]=ki[i];
+        }
         gameOver=true;
         player1Win=true;
         for(r1=0; r1<8; r1++)
@@ -375,12 +402,11 @@ void checkmateblack()
                             else if(board[r1][c1]=='P')
                                 pawnP2(c1,c2,r1,r2);
                             else if(board[r1][c1]=='K')
-                                {king(c1,c2,r1,r2);
-                                for(i=0;i<4;i++)
-                            {
-                              ki[i]=tempki[i];
-                            }}
-                            checkWhiteMoves();                                //checks danger on king after every move
+                                king(c1,c2,r1,r2);
+
+                            checkWhiteMoves();
+
+                            //checks danger on king after every move
                             if(whiteMoves[ki[2]+2][ki[3]+2]!=1)  //if a move succeeded to remove danger then its not checkmate
                             {
                                 gameOver=false;
@@ -394,6 +420,10 @@ void checkmateblack()
                                 }
                                 return;
                             }
+                            for(i=0; i<4; i++)
+                            {
+                                ki[i]=tempki[i];
+                            }
                         }
                     }
                 }
@@ -401,6 +431,7 @@ void checkmateblack()
         }
     }
 }
+
 /********************************************************************************************************************************
 *                             this function checks if black king wins                                                           *
 *it does by moving every white piece to all possible moving spots if it removes danger on king then its not checkmate           *
@@ -419,9 +450,9 @@ void checkmateWhite()
     }
     if(blackMoves[ki[0]+2][ki[1]+2]==1)
     {
-        for(i=0;i<4;i++)
+        for(i=0; i<4; i++)
         {
-          tempki[i]=ki[i];
+            tempki[i]=ki[i];
         }
         gameOver=true;
         player2Win=true;
@@ -454,10 +485,7 @@ void checkmateWhite()
                                 pawnP1(c1,c2,r1,r2);
                             else if(board[r1][c1]=='k')
                                 king(c1,c2,r1,r2);
-                                for(i=0;i<4;i++)
-                                {
-                                  ki[i]=tempki[i];
-                                }
+
                             checkBlackMoves();      //checks danger on king after every move
                             if(blackMoves[ki[0]+2][ki[1]+2]!=1)  //if a move succeeded to remove danger then its not checkmate
                             {
@@ -472,6 +500,10 @@ void checkmateWhite()
                                     }
                                 }
                                 return;
+                            }
+                            for(i=0; i<4; i++)
+                            {
+                                ki[i]=tempki[i];
                             }
                         }
                     }
@@ -945,6 +977,7 @@ void player1Move()
         {
             undoFunc();
             player2Move();
+            redoIndex=undoindex;
             return ;
         }
 
@@ -1122,7 +1155,10 @@ void player2Move()
         if(undoindex>0)
         {
             undoFunc();
+
             player1Move();
+            redoIndex=undoindex;
+
             return ;
         }
     }
@@ -1932,6 +1968,7 @@ void straight(int y1,int y2,int x1,int x2)
 
                 }
             }
+
             if(y1>y2)       //checks if there are pieces between start and end
             {
                 i=y2+1;
