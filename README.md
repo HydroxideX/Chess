@@ -8,7 +8,7 @@ bool stalemate = false,
      gameOver=false,
      player1Win=false,
      player2Win=false;
-
+int     WhoWillLoad=0;
 // PAWN
 int Te1;
 int Te2;
@@ -86,6 +86,11 @@ void save()
 
     int i,j;
 
+    FILE * fpa;
+    fpa=fopen("l.text","w");
+    fprintf(fpa," %i",WhoWillLoad);
+    fclose(fpa);
+
     FILE * fPointer;
     fPointer = fopen("Save.text","w");
     for (i=0; i<8; i++)
@@ -112,8 +117,13 @@ void save()
 
 void load()
 {
-
+    system("cls");
     int i,j;
+    FILE * fpa;
+    fpa=fopen("l.text","r");
+    fscanf(fpa," %i",&WhoWillLoad);
+    fclose(fpa);
+
     FILE * fPointer;
 
     fPointer = fopen("Save.text","r");
@@ -137,6 +147,13 @@ void load()
     fclose(fP);
 
 
+    if(WhoWillLoad==true)
+    {
+        player1Move();
+        WhoWillLoad=false;
+    }
+    else
+        player2Move();
 
 
 }
@@ -615,13 +632,13 @@ void checkPawn2Upgrade(int x2,int y2)
 {
     char upgrade2;
 
-    if(x2==7)
+    if(x2==7 && board[x2][y2] =='P')
     {
         printf("\n");
         printf("Upgrade Your Pawn : ");
         scanf(" %c", &upgrade2);
         UndoRedoUpgrade[undoindex][0]='P';
-        if(upgrade2=='H')
+        if(upgrade2=='H' )
         {
 
             board[x2][y2] = 'H';
@@ -678,6 +695,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
         }
         else
             EnPassent1=false;
+
         if ( x1 == 6 )
         {
             if( (y1==y2+1||y1==y2-1) && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
@@ -760,7 +778,7 @@ void checkPawn1Upgrade(int x2,int y2)
 {
 
     char upgrade1;
-    if(x2==0)
+    if(x2==0 && (board[x2][y2] =='p') )
     {
         printf("\n");
         printf("Upgrade Your Pawn : ");
@@ -954,6 +972,7 @@ void player1Move()
     printboard();
     checkBlackMoves();
     stalematewhite();
+    checkBlackMoves();
     if(blackMoves[ki[0]+2][ki[1]+2]==1)         //if king is in danger
     {
         checkmateWhite();                       //checks if game is over or not
@@ -1000,6 +1019,7 @@ void player1Move()
     }
     else if(c1=='S' || c1 =='s')
     {
+        WhoWillLoad=1;
         save();
     }
     else if(c1=='L'||c1=='l')
@@ -1032,7 +1052,7 @@ void player1Move()
         player1Move();
         return;
     }
-    if(n1==n2&&c1==c2)
+    else if(n1==n2&&c1==c2)
     {
         system("cls");
         player1Move();
@@ -1118,6 +1138,7 @@ void player1Move()
     redoTemp[undoindex++][3]=y1;
     redoIndex++;
 }
+
 void player2Move()
 {
 
@@ -1133,6 +1154,7 @@ void player2Move()
     printboard();
     checkWhiteMoves();
     stalemateblack();
+    checkWhiteMoves();
     if(whiteMoves[ki[2]+2][ki[3]+2]==1)   //if king is in danger
     {
         checkmateblack();
@@ -1155,10 +1177,8 @@ void player2Move()
         if(undoindex>0)
         {
             undoFunc();
-
             player1Move();
             redoIndex=undoindex;
-
             return ;
         }
     }
