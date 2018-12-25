@@ -595,7 +595,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 EnPassent1UR = true;
                 //  checkPawn2Upgrade(x2,y2);
             }
-            else  if(y1!=y2 && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
+            else  if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
             {
                 if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
                 {
@@ -632,7 +632,7 @@ void checkPawn2Upgrade(int x2,int y2)
 {
     char upgrade2;
 
-    if(x2==7 && board[x2][y2] =='P')
+    if(x2==7 && x2==Te3+1)
     {
         printf("\n");
         printf("Upgrade Your Pawn : ");
@@ -723,7 +723,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
 
         else if(x1<6)
         {
-            if( y1!=y2 && (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
+            if( (y1==y2+1||y1==y2-1)&& (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
             {
                 board[x2][y2] = 'p';
                 if(board[x1][y1+1] == 'P')
@@ -741,7 +741,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
                 EnPassent2UR=true;
                 checkPawn1Upgrade();
             }
-            else  if(y1!=y2 && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
+            else  if((y1==y2+1||y1==y2-1) && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
             {
                 if(board[x2][y2] != 'p' &&board[x2][y2] != 'r'&&board[x2][y2] != 'h'&&board[x2][y2] != 'b'&&board[x2][y2] != 'q' )
                 {
@@ -778,7 +778,7 @@ void checkPawn1Upgrade(int x2,int y2)
 {
 
     char upgrade1;
-    if(x2==0 && (board[x2][y2] =='p') )
+    if(x2==0 && x2==Te3-1)
     {
         printf("\n");
         printf("Upgrade Your Pawn : ");
@@ -909,12 +909,13 @@ void redo()
     {
         board[ redoTemp[undoindex][0] ] [ redoTemp[undoindex][1] ] = UndoRedoUpgrade[undoindex][1];
         board[redoTemp[undoindex][2]][redoTemp[undoindex][3]] = boardlayout[redoTemp[undoindex][2]][redoTemp[undoindex][3]];
-        upgradeRedo = false;
+
         deadPieces[deadindex++] =  checkChar[undoindex][1];
 
         checkPawn1Upgrade(Te1,Te2);
         checkPawn2Upgrade(Te1,Te2);
         undoindex++;
+        upgradeRedo = false;
 
     }
     // For Redo To Pawn Upgrade Without Kill
@@ -984,7 +985,7 @@ void player1Move()
     }
     char c1,c2,c3;
 // Positions
-    printf("\n\nPlayer1:");
+    printf("\n\nPlayer 1 :  Position U(Undo) R(Redo) S(Save) L(Load) ");
     char input[10000];
     gets(input);
     c1=input[0];
@@ -1167,7 +1168,7 @@ void player2Move()
         return;
     }
 // Positions
-    printf("\n\nPlayer2:");
+    printf("\n\nPlayer 2 :  Position U(Undo) R(Redo) S(Save) L(Load) ");
     char input[10000];
     gets(input);
     c1=input[0];
