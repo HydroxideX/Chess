@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+int main()
+{
+    // Functions Call
+    while(gameOver==false)
+    {
+        player1Move();
+        if(gameOver==true)
+            break;
+         player2Move();
+    }
+    if (player1Win==true)
+    {
+        printf("\nCheckmate.\n");
+        printf("Player 1 Wins.");
+    }
+    else if (player2Win==true)
+    {
+        printf("\n\nCheckmate.\n");
+        printf("Player 2 Wins.");
+    }
+    else
+    {
+        printf("Stalemate");
+    }
+   /* printf("\n\n If You Want To Undo Press U");
+        char c;
+        scanf(" %c",&c);
+        if(c=='U' || c=='u')
+        {
+                player1Move();
+        }
+        else
+            */
+            char c;
+            scanf(" %c",&c);
+            return 0;
+}
