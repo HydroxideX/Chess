@@ -14,6 +14,7 @@ bool stalemate = false,
 int Te1; // stores x2 of pawn
 int Te2; // stores y2 of pawn
 int Te3; // stores x1 of pawn
+int passentFix=0;
 int  PassentP2X,PassentP2Y; // for en passent movment
 int  PassentP1X,PassentP1Y;
 char arr[100];
@@ -24,7 +25,9 @@ bool upgradeRedo=false,
      EnPassent2=false,
      checkupgrade=false,
      EnPassent2UR=false,
-     EnPassent1UR=false;
+     EnPassent1UR=false,
+     EnPassentRedo1=false,
+     EnPassentRedo2=false;
 // *******************************************
 
 //UNDO AND REDO
@@ -578,10 +581,10 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 return ;
         }
 
-        if(x1>1)
+        else if(x1>1)
         {
             // if x1>1 pawn could only move 1 step forward
-            if(  (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true && x2==PassentP1X+1 && y2==PassentP1Y )
+         /*   if(  (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true && x2==PassentP1X+1 && y2==PassentP1Y )
             {
                 board[x2][y2] = 'P';
                 if(board[x1][y1+1] == 'p')
@@ -598,8 +601,9 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 EnPassent1UR = true;
 
             }
+            */
             // or he could eat diagonally
-            else  if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
+            if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
             {
                 if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
                 {
@@ -691,7 +695,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
         Te2=y2;
         Te3=x1;
 
-        if(x1-x2 == 2)
+        if(abs(x1-x2) == 2)
         {
             EnPassent1=true;
             PassentP1X=x2;
@@ -727,7 +731,7 @@ void pawnP1(int y1,int y2,int x1,int x2)
 
         else if(x1<6)
         {
-            if( (y1==y2+1||y1==y2-1)&& (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
+      /*      if( (y1==y2+1||y1==y2-1)&& (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
             {
                 board[x2][y2] = 'p';
                 if(board[x1][y1+1] == 'P')
@@ -740,12 +744,19 @@ void pawnP1(int y1,int y2,int x1,int x2)
                     board[x1][y1] = boardlayout[x1][y1];
                     board[x1][y2] = boardlayout[x1][y1-1];
                 }
-                deadPieces[deadindex++]='P';
+                passentFix++;
+                if(passentFix==1)
+                {
+                    deadPieces[deadindex++]='P';
+
+                }else
+                    passentFix--;
 
                 EnPassent2UR=true;
-                checkPawn1Upgrade();
+              //  checkPawn1Upgrade();
             }
-            else  if((y1==y2+1||y1==y2-1) && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
+            */
+            if((y1==y2+1||y1==y2-1) && x2<x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x2==x1-1)
             {
                 if(board[x2][y2] != 'p' &&board[x2][y2] != 'r'&&board[x2][y2] != 'h'&&board[x2][y2] != 'b'&&board[x2][y2] != 'q' )
                 {
@@ -833,12 +844,14 @@ void checkPawn1Upgrade(int x2,int y2)
 
 }
 // UNDO FUNCTION
+bool EnPassentRedo=false;
 void undoFunc()
 {
 
     undoindex--; // undo index -- because we incremented it on the player move
 
     // For Undo Pawn Passent
+    // player 1 do enpassent
     if( EnPassent2UR == true && checkChar[undoindex][0] =='p' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.'))
     {
         board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
@@ -847,16 +860,20 @@ void undoFunc()
         deadPieces[deadindex-1]=' ';
         deadindex--;
         EnPassent2UR = false;
+        EnPassentRedo2=true;
     }
-    else if( EnPassent1UR == true && checkChar[undoindex][0] =='P' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.') )
+    // player 2 do enpassent
+    else if( EnPassent1UR == true && checkChar[undoindex][0] =='P' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.'))
     {
         board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
         board[undo[undoindex][2]][undo[undoindex][3]] = boardlayout[undo[undoindex][2]][undo[undoindex][3]];
-        board[PassentP1X][PassentP1Y] = 'p';
+        board[undo[undoindex-1][2]][undo[undoindex-1][3]] = 'p';
         deadPieces[deadindex-1]=' ';
         deadindex--;
         EnPassent1UR = false;
+        EnPassentRedo1=true;
     }
+
     // For Undo To Pawn Upgrade Without Kill
     else if( (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.')&& (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
     {
@@ -908,6 +925,23 @@ void undoFunc()
 // REDO FUNCTION
 void redo()
 {
+    // For Redo With Enpassent p2
+    if(EnPassentRedo1==true)
+    {
+        EnPassentRedo1=false;
+        EnPassent1UR=true;
+        board[ undo[undoindex-1][2] ] [ undo[undoindex-1][3] ] = boardlayout[undo[undoindex-1][2] ] [ undo[undoindex-1][3] ];
+        deadPieces[deadindex++] = 'p';
+    }
+
+    // For Redo With Enpassent p1
+    if(EnPassentRedo2==true)
+    {
+        EnPassentRedo2=false;
+        EnPassent2UR=true;
+        board[ undo[undoindex-1][2] ] [ undo[undoindex-1][3] ] = boardlayout[undo[undoindex-1][2] ] [ undo[undoindex-1][3] ];
+        deadPieces[deadindex++] = 'P';
+    }
     //For Redo To Pawn Upgrade With kill
     if((checkChar[undoindex][1] !='-'||checkChar[undoindex][1]!='.') && (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
     {
@@ -963,6 +997,54 @@ void redo()
 
 }
 
+
+void passentFunc1(int x1,int x2,int y1,int y2)
+{
+        if(x1<6)
+        {
+        if( (y1==y2+1||y1==y2-1)&& (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'P' || board[x1][y1-1] == 'P') && x1==3 &&  EnPassent2==true && x2==PassentP2X-1 && y2==PassentP2Y )
+            {
+                board[x2][y2] = 'p';
+                if(board[x1][y1+1] == 'P')
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1+1];
+                }
+                else if(board[x1][y1-1] == 'P'  )
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1-1];
+                }
+                deadPieces[deadindex++]='P';
+                EnPassent2UR=true;
+              //  checkPawn1Upgrade();
+            }
+        }
+}
+
+void passentFunc2(int x1,int x2,int y1,int y2)
+{
+    if(x1>1)
+    {
+         if( (y1==y2+1||y1==y2-1)&& (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true  )
+            {
+                board[x2][y2] = 'P';
+                if(board[x1][y1+1] == 'p')
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1+1];
+                }
+                else if(board[x1][y1-1] == 'p')
+                {
+                    board[x1][y1] = boardlayout[x1][y1];
+                    board[x1][y2] = boardlayout[x1][y1-1];
+                }
+                deadPieces[deadindex++]='p';
+                EnPassent1UR = true;
+
+            }
+    }
+}
 void player1Move()
 {
     int i,j;
@@ -1077,6 +1159,7 @@ void player1Move()
     {
         pawnP1(y1,y2,x1,x2);
         checkPawn1Upgrade(x2,y2);
+         passentFunc1(x1,x2,y1,y2);
     }
 
     else if((board[x1][y1]=='r'||board[x1][y1]=='q')&&((x2==x1)||(y2==y1)))
@@ -1251,6 +1334,7 @@ void player2Move()
     {
         pawnP2(y1,y2,x1,x2);
         checkPawn2Upgrade(x2,y2);
+        passentFunc2(x1,x2,y1,y2);
     }
 
     else if((board[x1][y1]=='R'||board[x1][y1]=='Q')&&((x2==x1)||(y2==y1)))
@@ -2192,7 +2276,7 @@ int main()
     {
         printf("Stalemate");
     }
-    printf("\n\n If You Want To Undo Press U");
+   /* printf("\n\n If You Want To Undo Press U");
         char c;
         scanf(" %c",&c);
         if(c=='U' || c=='u')
@@ -2200,5 +2284,6 @@ int main()
                 player1Move();
         }
         else
+            */
             return 0;
 }
