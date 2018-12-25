@@ -4,16 +4,17 @@
 int ki[4] = {7,4,0,4};
 int tempki[4]= {7,4,0,4};
 //GENERAL
+
 bool stalemate = false,
      gameOver=false,
      player1Win=false,
      player2Win=false;
 	int     WhoWillLoad=0;
 // PAWN
-int Te1;
-int Te2;
-int Te3;
-int  PassentP2X,PassentP2Y;
+int Te1; // stores x2 of pawn
+int Te2; // stores y2 of pawn
+int Te3; // stores x1 of pawn
+int  PassentP2X,PassentP2Y; // for en passent movment
 int  PassentP1X,PassentP1Y;
 char arr[100];
 int indexo=0;
@@ -534,7 +535,7 @@ void checkmateWhite()
 void pawnP2(int y1,int y2,int x1,int x2)
 {
 
-    if(board[x1][y1] == 'P')
+    if(board[x1][y1] == 'P') // check if board is P
     {
 
 
@@ -543,8 +544,8 @@ void pawnP2(int y1,int y2,int x1,int x2)
         Te3=x1;
         if(x2-x1 == 2)
         {
-            arr[indexo++]=y2;
-            EnPassent2=true;
+            arr[indexo++]=y2; // stores y2 in array every single movement
+            EnPassent2=true; // get en passent values
             PassentP2X=x2;
             PassentP2Y=y2;
         }
@@ -552,7 +553,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
             EnPassent2=false;
 
 
-        if ( x1 == 1 )
+        if ( x1 == 1 ) // if x==1 pawn could move 2 steps
         {
             if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.'  && x2==x1+1)
             {
@@ -568,6 +569,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
             }
             else if(y1 == y2 && x2 <=3 && x2>x1 && (board[x2][y2] == '-' ||board[x2][y2] == '.' ) && (board[x1+1][y1] =='.' || board[x1+1][y1]=='-') )
             {
+
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
 
@@ -578,6 +580,7 @@ void pawnP2(int y1,int y2,int x1,int x2)
 
         if(x1>1)
         {
+            // if x1>1 pawn could only move 1 step forward
             if(  (board[x2][y2] =='-' || board[x2][y2] =='.')  &&   (board[x1][y1+1] == 'p' || board[x1][y1-1] == 'p') && x1==4 &&  EnPassent1==true && x2==PassentP1X+1 && y2==PassentP1Y )
             {
                 board[x2][y2] = 'P';
@@ -593,15 +596,16 @@ void pawnP2(int y1,int y2,int x1,int x2)
                 }
                 deadPieces[deadindex++]='p';
                 EnPassent1UR = true;
-                //  checkPawn2Upgrade(x2,y2);
+
             }
+            // or he could eat diagonally
             else  if( (y1==y2+1||y1==y2-1) && x2>x1 && board[x2][y2] != '-' && board[x2][y2] != '.' && x1==x2-1)
             {
                 if(board[x2][y2] != 'P' &&board[x2][y2] != 'R'&&board[x2][y2] != 'H'&&board[x2][y2] != 'B'&&board[x2][y2] != 'Q' )
                 {
                     board[x2][y2] = 'P';
                     board[x1][y1] = boardlayout[x1][y1];
-                    // checkPawn2Upgrade(x2,y2);
+
                 }
                 else
                     return ;
@@ -611,13 +615,13 @@ void pawnP2(int y1,int y2,int x1,int x2)
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
-                //checkPawn2Upgrade(x2,y2);
+
             }
             else if(y1 == y2 && x2==x1+1 && board[x2][y2] == '.')
             {
                 board[x2][y2] = 'P';
                 board[x1][y1] = boardlayout[x1][y1];
-                //  checkPawn2Upgrade(x2,y2);
+
             }
             else
                 return ;
@@ -630,9 +634,9 @@ void pawnP2(int y1,int y2,int x1,int x2)
 }
 void checkPawn2Upgrade(int x2,int y2)
 {
-    char upgrade2;
+    char upgrade2; // char to store upgrade value in
 
-    if(x2==7 && x2==Te3+1)
+    if(x2==7 && x2==Te3+1) // te3 is x1 of the pawn ( his initial place )
     {
         printf("\n");
         printf("Upgrade Your Pawn : ");
@@ -672,7 +676,7 @@ void checkPawn2Upgrade(int x2,int y2)
         else
         {
             printf("Enter Valid Character !!!");
-            checkPawn2Upgrade(x2,y2);
+            checkPawn2Upgrade(x2,y2); // to check again if it was not correct answer
             return ;
         }
     }
@@ -832,9 +836,9 @@ void checkPawn1Upgrade(int x2,int y2)
 void undoFunc()
 {
 
-    undoindex--;
-    // For Undo Pawn Passent
+    undoindex--; // undo index -- because we incremented it on the player move
 
+    // For Undo Pawn Passent
     if( EnPassent2UR == true && checkChar[undoindex][0] =='p' && (checkChar[undoindex][1]=='-'||checkChar[undoindex][1]=='.'))
     {
         board[ undo[undoindex][0] ] [ undo[undoindex][1] ] = board[undo[undoindex][2]][undo[undoindex][3]];
@@ -864,7 +868,7 @@ void undoFunc()
     }
 
     // For Undo To Pawn Upgrade With Kill
-    // else if()
+
     else if(  (checkChar[undoindex][0] =='p'||checkChar[undoindex][0] =='P') && (undo[undoindex][2]==0||undo[undoindex][2]==7) )
     {
         upgradeRedo=true;
@@ -931,7 +935,7 @@ void redo()
 
     }
     //******************************
-    //For Redo With En Passent
+
     // For Normal Redo
     else if(checkChar[undoindex][1] =='-' || checkChar[undoindex][1] =='.')
     {
@@ -973,6 +977,7 @@ void player1Move()
     printboard();
     checkBlackMoves();
     stalematewhite();
+    checkBlackMoves();
     if(blackMoves[ki[0]+2][ki[1]+2]==1)         //if king is in danger
     {
         checkmateWhite();                       //checks if game is over or not
@@ -995,12 +1000,15 @@ void player1Move()
         if(undoindex>0)
         {
             undoFunc();
-            player2Move();
+           player2Move();
+
             redoIndex=undoindex;
-            return ;
+
+       //  return ;
         }
 
     }
+
     else if(c1=='R' || c1=='r')
     {
         if(undoindex<redoIndex)
@@ -1009,13 +1017,7 @@ void player1Move()
             player2Move();
             return ;
         }
-        /*    else
-            {
-                printf("Invalid Undo");
-                player1Move();
-                return ;
-            }
-            */
+
     }
     else if(c1=='S' || c1 =='s')
     {
@@ -1156,6 +1158,7 @@ void player2Move()
     printboard();
     checkWhiteMoves();
     stalemateblack();
+    checkWhiteMoves();
     if(whiteMoves[ki[2]+2][ki[3]+2]==1)   //if king is in danger
     {
         checkmateblack();
@@ -1177,12 +1180,16 @@ void player2Move()
     {
         if(undoindex>0)
         {
+
             undoFunc();
             player1Move();
+
             redoIndex=undoindex;
-            return ;
+
+       //    return ;
         }
     }
+
     else if(c1=='R' || c1=='r')
     {
         if(undoindex<redoIndex)
@@ -2169,7 +2176,7 @@ int main()
         player1Move();
         if(gameOver==true)
             break;
-        player2Move();
+         player2Move();
     }
     if (player1Win==true)
     {
@@ -2185,6 +2192,13 @@ int main()
     {
         printf("Stalemate");
     }
-
-    return 0;
+    printf("\n\n If You Want To Undo Press U");
+        char c;
+        scanf(" %c",&c);
+        if(c=='U' || c=='u')
+        {
+                player1Move();
+        }
+        else
+            return 0;
 }
