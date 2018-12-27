@@ -1,9 +1,4 @@
-
-bool stalemate = false,
-     gameOver=false,
-     player1Win=false,
-     player2Win=false;
-	int     WhoWillLoad=0;
+int     WhoWillLoad=0;
 // PAWN
 int Te1; // stores x2 of pawn
 int Te2; // stores y2 of pawn
